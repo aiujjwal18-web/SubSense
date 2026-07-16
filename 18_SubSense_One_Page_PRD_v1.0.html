@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SubSense — One-Page PRD</title>
+<style>
+  :root{
+    --bg:#0d0a1f;
+    --hero-a:#1a1440;
+    --hero-b:#2b1f5c;
+    --accent:#8b7cf6;
+    --accent-soft:#eae6fd;
+    --ink:#1a1730;
+    --ink-soft:#5c5875;
+    --line:#e7e4f3;
+    --card:#ffffff;
+    --page:#f7f6fb;
+    --tag-bg:#eeeafd;
+    --tag-ink:#6d5cd6;
+    --risk:#fdeaea;
+    --risk-line:#e8b9b9;
+    --scope:#f1f0f6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--page);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px;}
+
+  nav.topnav{
+    position:sticky;top:0;z-index:20;
+    background:rgba(247,246,251,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav-inner{
+    max-width:1160px;margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+  .brand{font-size:12px;letter-spacing:.12em;font-weight:700;color:var(--tag-ink);text-transform:uppercase;}
+  .navlinks{display:flex;gap:22px;flex-wrap:wrap;}
+  .navlinks a{font-size:13px;font-weight:600;color:var(--ink-soft);text-decoration:none;}
+  .navlinks a:hover{color:var(--ink);}
+  .navmeta{font-size:11px;color:#a19dbb;letter-spacing:.04em;font-family:ui-monospace,Menlo,monospace;}
+
+  header.hero{
+    background:linear-gradient(135deg,var(--hero-a),var(--hero-b) 60%,#3a2a72);
+    color:#fff;padding:56px 0 40px;
+  }
+  .eyebrow{font-size:12px;letter-spacing:.16em;color:#c9bdfb;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+  h1.title{font-size:44px;margin:0 0 16px;font-weight:700;letter-spacing:-0.02em;}
+  .tagline{font-size:17px;color:#d9d3f7;max-width:640px;margin:0 0 26px;}
+  .pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;}
+  .pill{
+    font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;
+    background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);
+    display:flex;align-items:center;gap:6px;
+  }
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:#a9f5c8;display:inline-block;}
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.14);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.14);}
+  .stat{background:rgba(255,255,255,0.06);padding:20px 22px;}
+  .stat .num{font-size:30px;font-weight:700;color:#fff;}
+  .stat .label{font-size:12.5px;color:#c9bdfb;margin-top:2px;}
+
+  section.sec{padding:52px 0;border-bottom:1px solid var(--line);}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .sec-no{font-size:13px;font-weight:700;color:var(--tag-ink);font-family:ui-monospace,Menlo,monospace;}
+  .sec-title{font-size:24px;font-weight:700;margin:0;letter-spacing:-0.01em;}
+  .sec-tag{font-size:11px;color:#a19dbb;text-transform:uppercase;letter-spacing:.08em;font-family:ui-monospace,Menlo,monospace;}
+
+  .grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;}
+  .card h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:#a19dbb;font-weight:700;}
+  .card p{margin:0 0 14px;color:var(--ink);font-size:15px;}
+  .subgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:6px;}
+  .subgrid h5{font-size:13.5px;margin:0 0 8px;font-weight:700;}
+  ul.plain{margin:0;padding:0;list-style:none;}
+  ul.plain li{position:relative;padding-left:16px;margin-bottom:7px;font-size:14px;color:var(--ink);}
+  ul.plain li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+  .quote-card{background:var(--tag-bg);border:1px solid #ded5fb;border-radius:14px;padding:20px 22px;margin-bottom:16px;}
+  .quote-card h4{color:var(--tag-ink);margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+  .quote-card p{font-style:italic;font-size:16px;line-height:1.5;margin:0;color:#3a3160;}
+
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--tag-bg);color:var(--tag-ink);padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:middle;}
+
+  .persona-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .persona-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;}
+  .persona-card .pnum{font-size:11px;font-weight:700;color:var(--tag-ink);font-family:ui-monospace,Menlo,monospace;margin-bottom:8px;}
+  .persona-card h3{margin:0 0 8px;font-size:17px;}
+  .persona-card p{margin:0 0 12px;font-size:13.5px;color:var(--ink-soft);}
+  .persona-q{font-size:13px;font-style:italic;color:var(--tag-ink);border-top:1px solid var(--line);padding-top:10px;margin:0;}
+  .excl-note{margin-top:16px;font-size:13px;color:var(--ink-soft);background:var(--scope);border-radius:10px;padding:12px 16px;}
+
+  .northstar{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+  .northstar .ns-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#c9bdfb;font-weight:700;margin-bottom:4px;}
+  .northstar .ns-val{font-size:26px;font-weight:700;}
+  .northstar .ns-note{font-size:12.5px;color:#d9d3f7;max-width:420px;}
+
+  table.metrics{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  table.metrics th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#a19dbb;padding:12px 16px;border-bottom:1px solid var(--line);background:#faf9fd;}
+  table.metrics td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink);}
+  table.metrics tr:last-child td{border-bottom:none;}
+  table.metrics td.metric-name{font-weight:600;white-space:nowrap;}
+
+  .pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .pillar-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;}
+  .pillar-card .badge{width:30px;height:30px;border-radius:8px;background:var(--tag-bg);color:var(--tag-ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-bottom:12px;}
+  .pillar-card h3{margin:0 0 6px;font-size:15.5px;}
+  .pillar-card p{margin:0 0 10px;font-size:13px;color:var(--ink-soft);}
+  .pillar-card .feats{font-size:12px;color:var(--ink);}
+  .pillar-card .feats span{display:block;margin-bottom:4px;padding-left:12px;position:relative;}
+  .pillar-card .feats span::before{content:"–";position:absolute;left:0;color:#a19dbb;}
+
+  .riskgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+  .risk-card{background:var(--risk);border:1px solid var(--risk-line);border-radius:14px;padding:20px 22px;}
+  .risk-card h4{margin:0 0 12px;font-size:15px;color:#8a3232;}
+  .scope-card{background:var(--scope);border:1px solid var(--line);border-radius:14px;padding:20px 22px;}
+  .scope-card h4{margin:0 0 12px;font-size:15px;}
+  ul.risklist{margin:0;padding:0;list-style:none;}
+  ul.risklist li{font-size:13.5px;margin-bottom:9px;padding-left:0;}
+  ul.risklist li b{font-weight:700;}
+  ul.scopelist{margin:0;padding:0;list-style:none;}
+  ul.scopelist li{font-size:13.5px;margin-bottom:9px;padding-left:20px;position:relative;color:var(--ink-soft);}
+  ul.scopelist li::before{content:"✕";position:absolute;left:0;color:#b0899a;font-size:11px;top:2px;}
+
+  .assum-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+  .assum-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;}
+  .assum-grid li{font-size:13.5px;margin-bottom:10px;list-style:none;position:relative;padding-left:16px;}
+  .assum-grid li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+  .milegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+  .mile{background:var(--card);padding:18px 18px;}
+  .mile.current{background:var(--tag-bg);}
+  .mile .mphase{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#a19dbb;font-weight:700;margin-bottom:6px;}
+  .mile.current .mphase{color:var(--tag-ink);}
+  .mile h4{margin:0 0 6px;font-size:14.5px;}
+  .mile p{margin:0;font-size:12px;color:var(--ink-soft);}
+
+  .stackgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+  .stackcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;}
+  .stackcard .icon{width:34px;height:34px;border-radius:8px;background:var(--tag-bg);color:var(--tag-ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin-bottom:10px;}
+  .stackcard h4{margin:0 0 2px;font-size:14.5px;}
+  .stackcard .cat{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--tag-ink);font-weight:700;margin-bottom:8px;}
+  .stackcard p{margin:0;font-size:12.5px;color:var(--ink-soft);}
+
+  footer{padding:28px 0 50px;}
+  .footgrid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:#a19dbb;font-family:ui-monospace,Menlo,monospace;}
+  .footcenter{text-align:center;width:100%;margin-top:6px;font-size:12px;color:#c3bfd6;}
+
+  @media(max-width:900px){
+    .grid2{grid-template-columns:1fr;}
+    .subgrid{grid-template-columns:1fr;}
+    .persona-grid{grid-template-columns:1fr;}
+    .pillar-grid{grid-template-columns:1fr 1fr;}
+    .riskgrid{grid-template-columns:1fr;}
+    .assum-grid{grid-template-columns:1fr;}
+    .milegrid{grid-template-columns:1fr 1fr;}
+    .stackgrid{grid-template-columns:1fr 1fr;}
+    .statgrid{grid-template-columns:1fr 1fr;}
+    h1.title{font-size:32px;}
+  }
+  @media(max-width:600px){
+    .pillar-grid,.stackgrid,.milegrid{grid-template-columns:1fr;}
+    .navlinks{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">SubSense / PRD</div>
+    <div class="navlinks">
+      <a href="#why">Why</a>
+      <a href="#who">Who</a>
+      <a href="#score">Score</a>
+      <a href="#what">What</a>
+      <a href="#guardrails">Guardrails</a>
+      <a href="#stack">Tech Stack</a>
+    </div>
+    <div class="navmeta">v1.0 &middot; Final &middot; July 2026</div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AI Subscription Decision Platform</div>
+    <h1 class="title">SubSense</h1>
+    <p class="tagline">Most subscription tools tell you what you already spent. SubSense gets ahead of the charge — reading every renewal before it hits, explaining what it means in plain terms, and handing you a decision instead of another line item.</p>
+    <div class="pills">
+      <div class="pill"><span class="dot"></span> Phase 1 (Database Foundation) complete &rarr; Building Phase 2 (Auth &amp; Profile)</div>
+      <div class="pill">Documentation: 17 docs frozen &middot; Implementation Baseline</div>
+    </div>
+    <div class="statgrid">
+      <div class="stat"><div class="num">3</div><div class="label">Primary user segments</div></div>
+      <div class="stat"><div class="num">5</div><div class="label">Product pillars</div></div>
+      <div class="stat"><div class="num">7</div><div class="label">Measurable MVP success metrics</div></div>
+      <div class="stat"><div class="num">P2</div><div class="label">Current build phase</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2 class="sec-title">Problem Statement &amp; Objective</h2>
+      <span class="sec-tag">The Why</span>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h4>Current Problem</h4>
+        <p>Modern users pay for recurring subscriptions across entertainment, productivity, AI tools, education, cloud services, fitness, and memberships. Because these payments renew automatically, awareness breaks down long before the decision ever gets made.</p>
+        <div class="subgrid">
+          <div>
+            <h5>Awareness gaps</h5>
+            <ul class="plain">
+              <li>Users forget renewal dates</li>
+              <li>Users underestimate annual spending</li>
+              <li>Duplicate or overlapping services go unnoticed</li>
+            </ul>
+          </div>
+          <div>
+            <h5>Decision gaps</h5>
+            <ul class="plain">
+              <li>Shared subscription payments become difficult to track</li>
+              <li>Cancellation decisions are delayed until after renewal</li>
+              <li>Existing tools mostly report spending after the fact</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="quote-card">
+          <h4>Vision</h4>
+          <p>Build the most trusted AI-assisted subscription decision platform that helps users understand recurring spending, stay informed before renewals, and make confident subscription decisions without taking control away from them.</p>
+        </div>
+        <div class="quote-card">
+          <h4>Mission</h4>
+          <p>Help users become aware of recurring subscription spending through timely reminders, financial context, and AI-assisted decision support — while ensuring users always remain in control of renewal, cancellation, sharing, and payment decisions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="who">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">02</span>
+      <h2 class="sec-title">Who We Serve</h2>
+      <span class="sec-tag">The Who</span>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="pnum">SEGMENT 01 &middot; PRIMARY</div>
+        <h3>Individual subscriber</h3>
+        <p>Individuals with multiple recurring subscriptions across entertainment, productivity, AI tools, education, and utilities.</p>
+        <p class="persona-q">"What am I paying for, and what renews soon?"</p>
+      </div>
+      <div class="persona-card">
+        <div class="pnum">SEGMENT 02 &middot; PRIMARY</div>
+        <h3>Students &amp; professionals</h3>
+        <p>Users paying for AI, productivity, streaming, and learning subscriptions who need clarity without a finance background.</p>
+        <p class="persona-q">"Is this subscription still worth reviewing?"</p>
+      </div>
+      <div class="persona-card">
+        <div class="pnum">SEGMENT 03 &middot; SECONDARY</div>
+        <h3>Shared households</h3>
+        <p>Roommates, couples, families, and small friend groups splitting streaming, software, or membership costs.</p>
+        <p class="persona-q">"Who owes what for shared subscriptions?"</p>
+      </div>
+    </div>
+    <div class="excl-note">Excluded from MVP: enterprise teams, large organizations, procurement departments, and full business spend management.</div>
+  </div>
+</section>
+
+<section class="sec" id="score">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">03</span>
+      <h2 class="sec-title">Score: Success Metrics</h2>
+      <span class="sec-tag">The Score</span>
+    </div>
+    <div class="northstar">
+      <div>
+        <div class="ns-label">Proposed North Star metric</div>
+        <div class="ns-val">Activation rate &ge; 80%</div>
+      </div>
+      <div class="ns-note">New accounts adding one subscription in their first session — the clearest sign the core loop landed. Proposed only: DEC-040 sets all seven metrics equally, none ranked North Star.</div>
+    </div>
+    <table class="metrics">
+      <tr><th>Metric</th><th>Target</th><th>Measured by</th></tr>
+      <tr><td class="metric-name">Activation rate</td><td>&ge; 80% of new accounts add one subscription within the first session</td><td>Onboarding flow analytics/event log</td></tr>
+      <tr><td class="metric-name">Time to first subscription</td><td>Median under 3 minutes from account creation to first saved subscription</td><td>Timestamp diff, account creation &rarr; <code>subscriptions</code> insert</td></tr>
+      <tr><td class="metric-name">Reminder delivery success rate</td><td>&ge; 99% of due reminders result in a delivered notification within 15 minutes of schedule</td><td><code>reminder_history</code> and <code>notifications</code> audit</td></tr>
+      <tr><td class="metric-name">AI insight generation success rate</td><td>&ge; 95% of AI requests return a usable recommendation, not a fallback state</td><td><code>ai_recommendations</code> success/fallback ratio</td></tr>
+      <tr><td class="metric-name">Shared payment completion rate</td><td>&ge; 90% of payment requests reach paid or archived within 14 days</td><td><code>payment_requests</code> status/age query</td></tr>
+      <tr><td class="metric-name">Core flow error rate</td><td>Under 1% of primary-flow requests return an unhandled error</td><td>Error logs / <code>audit_logs</code></td></tr>
+      <tr><td class="metric-name">Demo acceptance</td><td>All 12 Critical E2E scenarios pass with zero open Critical defects</td><td>QA sign-off per Exit Criteria</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="what">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">04</span>
+      <h2 class="sec-title">What We're Building</h2>
+      <span class="sec-tag">The What</span>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="badge">01</div>
+        <h3>Subscription awareness</h3>
+        <p>Know what subscriptions exist.</p>
+        <div class="feats">
+          <span>Searchable catalog + custom entry</span>
+          <span>Add, view, edit, archive lifecycle</span>
+          <span>INR/USD, 4 billing frequencies</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">02</div>
+        <h3>Renewal awareness</h3>
+        <p>Know when renewals occur.</p>
+        <div class="feats">
+          <span>Upcoming renewal visibility</span>
+          <span>6 reminder types, email-first via Resend</span>
+          <span>Post-renewal review prompt</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">03</div>
+        <h3>Financial awareness</h3>
+        <p>Understand monthly and annual cost.</p>
+        <div class="feats">
+          <span>Monthly/annual equivalent calculations</span>
+          <span>Recurring spend insights</span>
+          <span>Decision Workspace financial context</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">04</div>
+        <h3>AI decision support</h3>
+        <p>Receive contextual, explainable insight before renewal.</p>
+        <div class="feats">
+          <span>Renewal review prompts</span>
+          <span>Duplicate subscription detection</span>
+          <span>Explainable, non-executing recommendations</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">05</div>
+        <h3>Shared subscription management</h3>
+        <p>Track split amounts and reminder status.</p>
+        <div class="feats">
+          <span>Shared member management</span>
+          <span>Payment request status: pending &rarr; paid</span>
+          <span>Rail-aware cancellation guidance</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">+</div>
+        <h3>Premium &amp; capstone demo</h3>
+        <p>Non-production demonstration layer.</p>
+        <div class="feats">
+          <span>Razorpay Test Mode upgrade flow</span>
+          <span>Developer/Test Utilities</span>
+          <span>No live financial processing in MVP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="guardrails">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">05</span>
+      <h2 class="sec-title">Guardrails</h2>
+      <span class="sec-tag">The How We Stay Honest</span>
+    </div>
+    <div class="riskgrid">
+      <div class="risk-card">
+        <h4>Key risks</h4>
+        <ul class="risklist">
+          <li><b>AI overreach</b> — mitigated by enforcing BR-001 in backend and frontend copy</li>
+          <li><b>RLS mistakes</b> — mitigated by testing owner/member/admin access paths</li>
+          <li><b>Scope expansion</b> — mitigated by MVP scope discipline and change control</li>
+          <li><b>Defects found too late</b> — mitigated by the Phase 9.5 mid-build stress checkpoint (Week 3)</li>
+          <li><b>Payment confusion</b> — mitigated by labeling Razorpay as Test Mode everywhere</li>
+        </ul>
+      </div>
+      <div class="scope-card">
+        <h4>Explicitly out of scope (v1)</h4>
+        <ul class="scopelist">
+          <li>Automatic bank account or email scanning</li>
+          <li>Apple/Google subscription sync</li>
+          <li>Automated third-party cancellation execution</li>
+          <li>Production billing / live Razorpay payments</li>
+          <li>Browser extension, mobile app, enterprise administration</li>
+        </ul>
+      </div>
+    </div>
+    <div class="assum-card">
+      <h4 style="margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:#a19dbb;">Dependencies &amp; assumptions</h4>
+      <ul class="assum-grid">
+        <li>Users are willing to manually enter subscriptions without bank/email auto-import <span class="tag">Assumption</span></li>
+        <li>AI model can produce high-confidence renewal insight from manually entered data alone <span class="tag">Assumption</span></li>
+        <li>Email-first reminders (no push/mobile app) are sufficient for MVP engagement <span class="tag">Assumption</span></li>
+        <li>Razorpay Test Mode is an acceptable substitute for live payment validation in this capstone context <span class="tag">Assumption</span></li>
+      </ul>
+    </div>
+    <div class="milegrid">
+      <div class="mile">
+        <div class="mphase">Done</div>
+        <h4>Discovery &amp; architecture freeze</h4>
+        <p>Docs 00–09, IR-009 baseline, database migration applied &amp; live-verified against real Supabase project.</p>
+      </div>
+      <div class="mile current">
+        <div class="mphase">Current</div>
+        <h4>Foundation build</h4>
+        <p>Phase 2–5: Auth/profile, app shell, subscription management, Decision Workspace.</p>
+      </div>
+      <div class="mile">
+        <div class="mphase">Next</div>
+        <h4>Engagement loop</h4>
+        <p>Phase 6–9.5: reminders, AI decision support, sharing, insights, mid-build stress checkpoint.</p>
+      </div>
+      <div class="mile">
+        <div class="mphase">Future</div>
+        <h4>Demo &amp; ship</h4>
+        <p>Phase 10–13: premium demo, dev utilities, QA, deployment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="stack" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">06</span>
+      <h2 class="sec-title">Tech Stack to Be Used</h2>
+      <span class="sec-tag">The How (Build)</span>
+    </div>
+    <div class="stackgrid">
+      <div class="stackcard"><div class="icon">LV</div><h4>Lovable</h4><div class="cat">App builder</div><p>AI-assisted app builder for the product's frontend.</p></div>
+      <div class="stackcard"><div class="icon">SB</div><h4>Supabase</h4><div class="cat">Backend &amp; DB</div><p>Postgres, Auth, RLS, and Edge Functions.</p></div>
+      <div class="stackcard"><div class="icon">CL</div><h4>Claude</h4><div class="cat">AI reasoning</div><p>Architecture, documentation, and build reasoning support.</p></div>
+      <div class="stackcard"><div class="icon">AI</div><h4>OpenAI API</h4><div class="cat">AI model</div><p>Renewal insight generation and duplicate detection.</p></div>
+      <div class="stackcard"><div class="icon">GG</div><h4>Google API</h4><div class="cat">Data &amp; auth</div><p>Google Sign-In via Supabase Auth.</p></div>
+      <div class="stackcard"><div class="icon">RP</div><h4>Razorpay</h4><div class="cat">Payments</div><p>Test Mode premium demonstration only.</p></div>
+      <div class="stackcard"><div class="icon">VC</div><h4>Vercel</h4><div class="cat">Hosting</div><p>Deployment and hosting for the web application.</p></div>
+      <div class="stackcard"><div class="icon">GH</div><h4>GitHub</h4><div class="cat">Version control</div><p>Source control and CI/CD pipeline.</p></div>
+      <div class="stackcard"><div class="icon">RS</div><h4>Resend</h4><div class="cat">Email</div><p>Transactional email for reminders and digests.</p></div>
+      <div class="stackcard"><div class="icon">PM</div><h4>Postman</h4><div class="cat">API testing</div><p>Testing and documenting API contracts.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footgrid">
+      <div>SUBSENSE — ONE-PAGE PRD</div>
+      <div>Prepared for Product, Design &amp; Engineering alignment</div>
+    </div>
+    <div class="footcenter">Created by Ujjwal Chakrabarti</div>
+  </div>
+</footer>
+
+</body>
+</html>
