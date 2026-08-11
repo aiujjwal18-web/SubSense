@@ -1,0 +1,205 @@
+-- 29_SubSense_Reminder_Lifecycle_Patch_v1.0.sql
+-- Implements DEC-070: stale reminders were never invalidated when a subscription's
+-- next_renewal_date changed (e.g. the Paid quick-action, DEC-064) or when it was Paused
+-- (DEC-064) -- confirmed live: send-reminder-email delivered several reminders whose
+-- content directly contradicted the subscription's current dashboard state once the
+-- 401/403 auth issues blocking delivery were fixed (see 19_SubSense_Claude_Project
+-- _Instructions, DEC-070 paragraph, for the full incident writeup).
+--
+-- This is more than a cosmetic bug: 10_Database_Architecture's existing partial unique
+-- index -- UNIQUE (subscription_id, reminder_type) WHERE status = 'pending' -- means a
+-- stale pending reminder doesn't just deliver wrong content, it silently blocks the NEXT
+-- cycle's reminder of the same type from ever being inserted at all (ON CONFLICT DO
+-- NOTHING no-ops against the still-pending old row). So a subscription paid/renewed more
+-- than once could stop receiving reminders entirely, not just receive an extra stale one.
+--
+-- IMPORTANT: run this in two steps, not as one pasted block, same reason as
+-- 20_SubSense_Retention_Patch_v1.0.sql / 28_SubSense_Scheduled_Reminders_Patch_v1.0.sql --
+-- Postgres will not let a new enum value be used by a statement in the same
+-- transaction/statement batch that added it. Run Step 1, confirm it completes, then run
+-- Step 2 separately.
+--
+-- Step 2 is safe to re-run on its own if it fails partway (CREATE OR REPLACE FUNCTION,
+-- DROP TRIGGER IF EXISTS) -- just don't re-run Step 1 after Step 2 has already succeeded
+-- once; `add value if not exists` makes that safe too, but there is no reason to.
+ 
+-- =========================================================
+-- STEP 1 — run this first, on its own
+-- =========================================================
+ 
+-- New reminder_status value for a pending reminder that's been invalidated because the
+-- condition it was generated for no longer holds (renewal date moved, or the subscription
+-- was paused) -- distinct from 'skipped_archived' (the subscription itself was archived,
+-- already handled by the existing skip_reminders_for_archived_subscription() trigger).
+-- One generic value covers both causes deliberately: the reminders row's own history
+-- (subscription_id, updated_at, and the subscription's own lifecycle_status/
+-- next_renewal_date at query time) already lets anyone reconstruct which case applied,
+-- so a second, narrower enum value would only add schema surface without adding any
+-- information that isn't already recoverable.
+alter type public.reminder_status add value if not exists 'skipped_superseded';
+ 
+-- =========================================================
+-- STEP 2 — run this after Step 1 has committed
+-- =========================================================
+ 
+-- ---------------------------------------------------------
+-- 1. Extract generate_default_reminders()'s insertion loop into a plain (non-trigger)
+--    helper, callable both from the original trigger (now a thin wrapper) and from the
+--    new resume-regeneration path below (Postgres trigger functions return the `trigger`
+--    pseudo-type and cannot be called directly from another function's body, so the
+--    shared logic has to live in a plain function either way).
+-- ---------------------------------------------------------
+ 
+create or replace function public.generate_default_reminders_for_subscription(target_subscription_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  sub record;
+  user_tz text;
+  selected_days integer[];
+  d integer;
+  target_type public.reminder_type;
+  target_date date;
+begin
+  select s.id, s.user_id, s.next_renewal_date, s.archived_at
+  into sub
+  from public.subscriptions s
+  where s.id = target_subscription_id;
+ 
+  if not found or sub.archived_at is not null then
+    return;
+  end if;
+ 
+  select p.timezone into user_tz
+  from public.user_profiles p
+  where p.user_id = sub.user_id;
+ 
+  user_tz := coalesce(user_tz, 'Asia/Kolkata');
+ 
+  select pr.reminder_default_days into selected_days
+  from public.user_preferences pr
+  where pr.user_id = sub.user_id;
+ 
+  selected_days := coalesce(selected_days, array[7, 2, 0]);
+ 
+  foreach d in array selected_days loop
+    target_type := case d
+      when 7 then 'seven_day'
+      when 2 then 'two_day'
+      when 0 then 'renewal_day'
+      else null
+    end;
+ 
+    if target_type is null then
+      continue;
+    end if;
+ 
+    target_date := sub.next_renewal_date - d;
+ 
+    insert into public.reminders (user_id, subscription_id, reminder_type, scheduled_for, timezone_snapshot)
+    values (sub.user_id, sub.id, target_type, public.local_date_at_9am_tz(target_date, user_tz), user_tz)
+    on conflict do nothing;
+  end loop;
+end;
+$$;
+ 
+-- Original trigger function, now a thin wrapper over the shared helper above. Behavior
+-- for existing callers (insert/update of next_renewal_date, archived_at) is unchanged.
+create or replace function public.generate_default_reminders()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.archived_at is not null then
+    return new;
+  end if;
+ 
+  perform public.generate_default_reminders_for_subscription(new.id);
+ 
+  return new;
+end;
+$$;
+ 
+-- ---------------------------------------------------------
+-- 2. New function + trigger: cancels stale pending reminders when next_renewal_date
+--    changes or lifecycle_status enters 'paused', and regenerates the default set when
+--    a subscription resumes from 'paused' (next_renewal_date unchanged across a pause,
+--    so the existing generate_default_reminders() trigger never fires on resume alone --
+--    without this, a resumed subscription would go reminder-silent until its next Paid
+--    action).
+--
+--    Trigger name (subscriptions_cancel_stale_reminders) is deliberately alphabetically
+--    before subscriptions_generate_default_reminders -- Postgres fires same-event AFTER
+--    ROW triggers in trigger-name order, so the cancellation always runs and commits
+--    before generate_default_reminders() attempts its insert in the same statement,
+--    freeing the partial unique index slot the new row needs.
+-- ---------------------------------------------------------
+ 
+create or replace function public.handle_reminder_lifecycle_changes()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.archived_at is not null then
+    return new;
+  end if;
+ 
+  -- Renewal date moved (e.g. the Paid quick-action, DEC-064), or the subscription was
+  -- just paused: cancel every still-pending reminder generated for the state that no
+  -- longer holds. Includes post_renewal_checkin (generate_scheduled_reminders(), file
+  -- 28) alongside the three generate_default_reminders() types, since the same partial
+  -- unique index covers all four and a stale post_renewal_checkin is just as wrong to
+  -- deliver as a stale seven_day/two_day/renewal_day one.
+  if (old.next_renewal_date is distinct from new.next_renewal_date)
+     or (old.lifecycle_status is distinct from 'paused' and new.lifecycle_status = 'paused')
+  then
+    update public.reminders
+    set status = 'skipped_superseded', updated_at = now()
+    where subscription_id = new.id
+      and status = 'pending'
+      and reminder_type in ('seven_day', 'two_day', 'renewal_day', 'post_renewal_checkin');
+  end if;
+ 
+  -- Resumed from paused, renewal date unchanged: regenerate the default 7-day/2-day/
+  -- day-of set for the current next_renewal_date. (If next_renewal_date also changed in
+  -- this same update, generate_default_reminders()'s own trigger already handles that --
+  -- calling the helper again here is a harmless no-op via its own ON CONFLICT DO NOTHING.)
+  if old.lifecycle_status = 'paused' and new.lifecycle_status is distinct from 'paused' then
+    perform public.generate_default_reminders_for_subscription(new.id);
+  end if;
+ 
+  return new;
+end;
+$$;
+ 
+drop trigger if exists subscriptions_cancel_stale_reminders on public.subscriptions;
+create trigger subscriptions_cancel_stale_reminders
+after update of next_renewal_date, lifecycle_status
+on public.subscriptions
+for each row execute function public.handle_reminder_lifecycle_changes();
+ 
+-- Notes for whoever runs this file:
+--
+-- - Both new/changed functions are SECURITY DEFINER, matching the existing pattern for
+--   every function that writes to `reminders` (no client INSERT/UPDATE policy exists on
+--   that table).
+-- - Idempotent to re-run: CREATE OR REPLACE FUNCTION and DROP TRIGGER IF EXISTS make the
+--   whole of Step 2 safe to run more than once.
+-- - Does not touch: the existing subscriptions_archive_cascade trigger or
+--   skip_reminders_for_archived_subscription() function (archival is a separate,
+--   already-correct case, untouched by this patch); generate_scheduled_reminders()
+--   (file 28) or the monthly_digest/lapsed_reengagement reminder types (user-level, not
+--   subscription-anchored, not affected by a single subscription's renewal-date/pause
+--   changes).
+-- - No backfill for reminders already stuck pending from before this patch runs -- this
+--   only changes behavior going forward. If any already-sent stale emails (like the
+--   ones that surfaced this bug) need cleanup, that's a separate, one-off UPDATE the
+--   user can run by hand after confirming which rows are actually stale, not something
+--   this migration does automatically.

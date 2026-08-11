@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SubSense — Expanded PRD</title>
+<meta name="description" content="SubSense is an AI-assisted subscription decision platform that gets ahead of every renewal — reading spend patterns, explaining annualized cost, flagging duplicates, and turning silent auto-renewals into deliberate decisions. Expanded PRD: full detail drawn from the governing product documents.">
+<style>
+  /* Light-mode tokens (05_Design_System, Cyber Lime accent per DEC-073) — same system as
+     18_SubSense_One_Page_PRD_v1.6.html, reused here for visual consistency across both PRD
+     documents. --border-strong, --text-muted, --accent-hover are this file's own extrapolations
+     from the same Tailwind slate/lime family, matching doc 18's precedent. --status-todo /
+     --status-todo-bg are a PRD-local addition, not part of 05's status palette, per doc 19's
+     existing note about doc 18 — carried forward here for the same Build Status treatment.
+     Font: Benton Sans Book, matching doc 18's one-off deviation from 05's type system.
+
+     v1.2 — Housekeeping fix, not tied to a new DEC: corrected the stale
+     18_SubSense_One_Page_PRD citation above from v1.3 to v1.4. Found via a
+     full-folder citation-staleness grep audit; no visual or copy content changed.
+     Further correction (same day, DEC-056 login-page visual exception cascade):
+     the Key Decisions section's 08_Decision_Log citation corrected from v1.26 to
+     v1.27, and its entry count from 55 to 56 (DEC-056 added). Not bumping the
+     version again for this.
+     Further correction (DEC-057 brand kit cascade): the same citation corrected
+     from v1.27 to v1.28, and its entry count from 56 to 57 (DEC-057 added). This
+     document's own visual system (Ledger Dark light-mode tokens, per the header
+     comment above) is unaffected — DEC-057 is a dark-canvas-only brand kit and
+     does not touch light-mode/email/PRD surfaces, deliberately deferred pending
+     a future decision. Not bumping the version again for this.
+     Further correction (DEC-058 motion-system cascade): the same citation
+     corrected from v1.28 to v1.29, and its entry count from 57 to 58 (DEC-058
+     added). DEC-058 concerns main-app motion/background treatment only and does
+     not touch this document's own light-mode visual system. Not bumping the
+     version again for this either.
+     Further correction (DEC-059 generic-icon cascade): the same citation
+     corrected from v1.29 to v1.30, and its entry count from 58 to 59 (DEC-059
+     added). DEC-059 concerns subscription-catalog icon rendering only and does
+     not touch this document's own light-mode visual system. Not bumping the
+     version again for this either.
+     Further correction (DEC-060/061 logo-asset and Header-restructure
+     cascade): the same citation corrected from v1.30 to v1.32, and its entry
+     count from 59 to 61 (DEC-060 and DEC-061 both added). Neither touches this
+     document's own light-mode visual system. Not bumping the version again
+     for this either.
+     Further correction (DEC-062/063/064 cascade): the same citation
+     corrected from v1.32 to v1.35, and its entry count from 61 to 64
+     (DEC-062, DEC-063, and DEC-064 all added). None of the three touch this
+     document's own light-mode visual system or its curated Key Decisions
+     selection (glow-card, gradient-button, and card-quick-action UX/product
+     decisions are not among the ~20 curated rows shown). Not bumping the
+     version again for this either.
+
+     v1.3 — Real content rebuild, not a citation-only pass: this document's
+     Key Decisions table and Build Status section had both drifted stale
+     while every earlier DEC cascade only ever touched the 08_Decision_Log
+     citation/entry-count line above. Key Decisions: added five new curated
+     rows (DEC-054 Renewal Urgency Indicator thresholds, DEC-059 generic
+     category icons/no real brand logos, DEC-064 Paid/Paused/Resume
+     quick-actions, DEC-065 Cyber Lime reskin, DEC-066 retiring the
+     DEC-056 pre-authentication exception) — the table had stopped adding
+     rows at DEC-053 despite doc 08 advancing to 66 total entries; DEC-055,
+     056, 057, 058, 060, 061, 062, 063 were reviewed and deliberately left
+     out, matching this table's own established bar (curated, most direct
+     bearing on what SubSense is and how it behaves — not UX/visual
+     housekeeping, which is why DEC-043/044/045-tier decisions were never
+     here either). 08_Decision_Log citation and entry count already
+     corrected to v1.37/66 in an earlier same-day pass. Build Status:
+     Phases 2, 3, and 4 were still shown as in-progress/not-started despite
+     being fully built, live-verified, and committed — corrected to Done
+     with real completion notes (Phase 2's auth-error-display bug fix and
+     the two full visual passes its sign-in screen has since been through;
+     Phase 3's Header-to-TopBar/TopBarActions restructure under DEC-061;
+     Phase 4's dialog and native-select bugs found and fixed). Phase 5's
+     note updated to record that the Cyber Lime reskin and pre-auth
+     exception retirement were deliberately sequenced ahead of it. Status
+     bar/legend recalculated: 4 of 15 phases done, 1 in progress
+     (Repository/Environment Setup, still genuinely incomplete per doc 19 —
+     OpenAI key and Vercel link outstanding), 10 not started — verified by
+     counting each phase's own `data-status` attribute directly rather than
+     hand-tallying.
+
+     Further correction (DEC-067 cascade — Decision Workspace 7-day filter +
+     Recommended Reviews honest placeholder): the Key Decisions section's
+     08_Decision_Log citation corrected from v1.37 to v1.38, and its entry
+     count from 66 to 67 (DEC-067 added to the register). DEC-067 itself is
+     deliberately NOT added as a new curated row in this pass — that is a
+     content-curation decision distinct from this citation-integrity fix, and
+     is flagged as an open question rather than resolved silently here,
+     alongside the doc 04 Decision Workspace Blueprint gap DEC-067's own
+     entry in doc 08 also flags. Not bumping the version again for this.
+
+     Further correction (doc 04/08 follow-up — closing DEC-067's own
+     flagged doc 04 gap): the user confirmed "AI Insights" and "Recommended
+     Reviews" are one concept split across two UI slots for now, not two
+     distinct Primary content items — doc 04 updated with a clarifying
+     Implementation notes bullet (bumped to v1.18, no Key Decisions table
+     change here since this isn't a new DEC). The Key Decisions section's
+     08_Decision_Log citation corrected from v1.38 to v1.39 (entry count
+     unchanged at 67 — DEC-067's own entry was amended in place, not a new
+     row). Not bumping the version again for this.
+
+     Further correction (this pass, real staleness caught only because the
+     user asked directly whether Phase 5 was done): the P5 Decision Workspace
+     phase card was still marked "Not started" despite having been built and
+     iterated on across DEC-062/064/067 — flipped to Done, with a completion
+     note. The P0 Repository and Environment Setup phase card was also still
+     marked "In progress" with "Outstanding: OpenAI key, Vercel link" despite
+     both being resolved this same session (Edge Function secrets stored,
+     Vercel connected and the subsense.co.in domain live) — flipped to Done
+     too. Status bar/legend recalculated twice in this same pass: first to
+     5 of 15 done (P5 alone), then to 6 of 15 done, 0 in progress, 9 not
+     started (P0 also flipped) — verified by counting `data-status`
+     attributes directly.
+
+     Further correction (this pass, real color drift found while rebuilding
+     the standalone one-pager PDF): this document's own `--accent`/
+     `--accent-hover`/`--accent-subtle-bg`/`--accent-subtle-text` tokens and
+     three hardcoded `rgba(30,64,175,...)` references were still the
+     original "Ledger Dark" blue (#1E40AF) — DEC-073 resolved the light-mode
+     accent gap for docs 24/25 (auth/reminder email templates) but this
+     document's own light-mode chrome (shared with doc 18, per the header
+     note above) was never actually touched, despite being the exact same
+     class of gap. Recolored to DEC-073's light-mode tokens: Accent Text
+     (light) #4D7C0F (text/border uses) and Accent Fill (light) #A3E635
+     (as an 8%/20%/30%-opacity tint, matching the prior blue tint's own
+     opacity values). `--accent-hover` set to an inferred darker derivative
+     (#3D6209, same hue family) — DEC-073 does not itself define a
+     light-mode hover value, same inference discipline as this file's own
+     pre-existing `--border-strong`/`--text-muted` extrapolations. This is
+     a same-day extension of DEC-073 (no new DEC number, matching how
+     DEC-073 was itself extended to doc 25 in its own creating session), not
+     bumping the version again for this either. The hero section's stale
+     "Phase 1 complete ->
+     Phase 2 in progress" pill (untouched since a very early point in this
+     document's history, predating even the phase-numbering scheme the Build
+     Status section itself uses) was also corrected to "6 of 15 phases done
+     -> Phase 6 next." Not bumping the version again for this — no new DEC,
+     pure status-tracking correction, same class of fix as the original
+     Phase 2-4 correction this v1.3 pass already made.
+
+     Further correction (this pass, caught while gathering accurate phase
+     status for a doc 18 rebuild): the P6 Reminder Engine and Notifications
+     phase card was still marked "Not started" despite DEC-068 through
+     DEC-071 having shipped, migrated, deployed, and live-verified its
+     entire scheduling/delivery pipeline this same project period — flipped
+     to Done, with a completion note naming the one deliberately deferred
+     sub-deliverable (Send Reminder Now UI, DEC-078) rather than overclaiming
+     full completion. Status bar/legend recalculated to 7 of 15 done, 0 in
+     progress, 8 not started; hero pill corrected to "7 of 15 phases done ->
+     Phase 7 next." Not bumping the version again for this — same class of
+     pure status-tracking correction as the P0/P5 fix above.
+
+     Previously flagged, now resolved in a later pass (see doc 18's own
+     v1.5 header comment for the full detail): doc 18 (One-Page PRD) carried
+     the identical hero pill text, an even more stale Build Status phase
+     tracker, and the same Ledger Dark accent-token drift this document
+     just had fixed above — all three reconciled once the user asked to
+     rebuild the standalone one-pager PDF and use doc 18 for the same pass.
+     The "18 governing docs" hero stat (present identically in both doc 18
+     and doc 26) was checked and left alone in both — plausibly a
+     historical count of the original 00-17 numbered package (18 files)
+     from before docs 18+ were established as non-governing overlays, not
+     confirmed stale, not touched without more certainty.
+
+     Further correction (DEC-068 cascade — Phase 6 reminder-scheduling
+     architecture: Supabase Cron, hourly send / daily generation split): the
+     Key Decisions section's 08_Decision_Log citation corrected from v1.39 to
+     v1.40, and its entry count from 67 to 68 (DEC-068 added to the register).
+     DEC-068 itself is deliberately NOT added as a new curated row in this
+     pass — it is a backend/architecture decision with no user-facing product
+     behavior, matching the same curation bar DEC-067 was held to (and DEC-031,
+     the precedent Architecture-category decision, is also not among the
+     curated rows). Not bumping the version again for this.
+
+     Further correction (DEC-069 cascade — reminders CHECK constraint
+     loosening, new audit_action enum value): the Key Decisions section's
+     08_Decision_Log citation corrected from v1.40 to v1.41, and its entry
+     count from 68 to 69 (DEC-069 added to the register). DEC-069 itself is
+     deliberately NOT added as a new curated row in this pass — a Database-
+     category migration-detail decision, same curation bar as DEC-067/068.
+     Not bumping the version again for this.
+
+     Further correction (DEC-070 cascade — reminder lifecycle fix: stale
+     reminders on renewal-date change/pause never invalidated): the Key
+     Decisions section's 08_Decision_Log citation corrected from v1.41 to
+     v1.42, and its entry count from 69 to 70 (DEC-070 added to the register).
+     DEC-070 itself is deliberately NOT added as a new curated row in this
+     pass — a Database-category bug-fix migration, same curation bar as
+     DEC-067/068/069. Not bumping the version again for this.
+
+     Further correction (DEC-071 cascade — post_renewal_checkin paused-
+     exclusion fix, a narrow residual gap found by walking DEC-070's fix
+     through every subscription-state transition): the Key Decisions
+     section's 08_Decision_Log citation corrected from v1.42 to v1.43, and
+     its entry count from 70 to 71 (DEC-071 added to the register). DEC-071
+     itself is deliberately NOT added as a new curated row in this pass —
+     same curation bar as DEC-067/068/069/070. Not bumping the version again
+     for this. */
+  :root{
+    --page:#FFFFFF;
+    --surface-1:#F1F5F9;
+    --surface-2:#FFFFFF;
+    --border:#E2E8F0;
+    --border-strong:#CBD5E1;
+    --text:#0F172A;
+    --text-soft:#64748B;
+    --text-muted:#94A3B8;
+    --accent:#4D7C0F;
+    --accent-hover:#3D6209;
+    --accent-subtle-bg:rgba(163,230,53,0.08);
+    --accent-subtle-text:#4D7C0F;
+    --status-neutral:#94A3B8;
+    --status-amber:#F59E0B;
+    --status-green:#059669;
+    --status-red:#DC2626;
+    --status-todo:#B8901F;
+    --status-todo-bg:rgba(184,144,31,0.12);
+    --font:'Benton Sans Book','Benton Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px;
+    --ease-out:cubic-bezier(0.16,1,0.3,1);
+    --t-hover:120ms; --t-toggle:200ms; --t-dialog:320ms; --t-exit:150ms;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--page);
+    color:var(--text);
+    font-family:var(--font);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  h1,h2,h3,h4,h5{font-family:var(--font);}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 var(--sp-7);}
+
+  nav.topnav{
+    position:sticky;top:0;z-index:20;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .topnav-inner{
+    max-width:1160px;margin:0 auto;padding:var(--sp-4) var(--sp-7);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-3);
+  }
+  .brand{font-size:12px;letter-spacing:.12em;font-weight:700;color:var(--accent);text-transform:uppercase;}
+  .navlinks{display:flex;gap:var(--sp-5);flex-wrap:wrap;}
+  .navlinks a{font-size:12.5px;font-weight:500;color:var(--text-soft);text-decoration:none;transition:color var(--t-hover) var(--ease-out);}
+  .navlinks a:hover{color:var(--text);}
+  .navmeta{font-size:11px;color:var(--text-muted);letter-spacing:.04em;}
+
+  header.hero{
+    background:var(--surface-1);
+    color:var(--text);padding:var(--sp-8) 0 var(--sp-7);
+    border-bottom:1px solid var(--border);
+  }
+  .eyebrow{font-size:12px;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;font-weight:700;margin-bottom:var(--sp-4);}
+  h1.title{font-size:46px;margin:0 0 var(--sp-4);font-weight:700;letter-spacing:-0.02em;}
+  .tagline{font-size:17px;color:var(--text-soft);max-width:640px;margin:0 0 var(--sp-6);}
+  .pills{display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-6);}
+  .pill{
+    font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;
+    background:var(--surface-2);border:1px solid var(--border);
+    display:flex;align-items:center;gap:var(--sp-2);
+  }
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--status-green);display:inline-block;}
+  .pill.orange .dot{background:var(--status-amber);}
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:14px;overflow:hidden;border:1px solid var(--border);}
+  .stat{background:var(--surface-2);padding:var(--sp-5) var(--sp-5);}
+  .stat .num{font-size:30px;font-weight:700;color:var(--text);}
+  .stat .label{font-size:12.5px;color:var(--text-soft);margin-top:2px;}
+
+  section.sec{padding:var(--sp-8) 0;border-bottom:1px solid var(--border);}
+  .sec-head{display:flex;align-items:baseline;gap:var(--sp-3);margin-bottom:var(--sp-6);flex-wrap:wrap;}
+  .sec-no{font-size:13px;font-weight:700;color:var(--accent);}
+  .sec-title{font-size:25px;font-weight:700;margin:0;letter-spacing:-0.01em;}
+  .sec-tag{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;}
+  .sec-intro{font-size:14px;color:var(--text-soft);max-width:760px;margin:-16px 0 var(--sp-6);}
+
+  .grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:var(--sp-5);}
+  .card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .card h4{margin:0 0 var(--sp-3);font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);font-weight:700;}
+  .card p{margin:0 0 var(--sp-4);color:var(--text);font-size:15px;}
+  .subgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-top:var(--sp-1);}
+  .subgrid h5{font-size:13.5px;margin:0 0 var(--sp-2);font-weight:600;color:var(--text);}
+  ul.plain{margin:0;padding:0;list-style:none;}
+  ul.plain li{position:relative;padding-left:var(--sp-4);margin-bottom:7px;font-size:14px;color:var(--text-soft);}
+  ul.plain li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+  .quote-card{background:var(--accent-subtle-bg);border:1px solid rgba(163,230,53,0.2);border-radius:12px;padding:18px 20px;margin-bottom:var(--sp-4);}
+  .quote-card h4{color:var(--accent);margin:0 0 var(--sp-2);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+  .quote-card p{font-style:italic;font-size:16px;line-height:1.55;margin:0;color:var(--text);}
+
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--accent-subtle-bg);color:var(--accent);padding:2px 8px;border-radius:6px;margin-left:var(--sp-2);vertical-align:middle;}
+
+  .persona-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5);}
+  .persona-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color var(--t-hover) var(--ease-out);}
+  .persona-card:hover{border-color:var(--accent);}
+  .persona-card .pnum{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:var(--sp-2);}
+  .persona-card h3{margin:0 0 var(--sp-2);font-size:17px;}
+  .persona-card p{margin:0 0 var(--sp-3);font-size:13.5px;color:var(--text-soft);}
+  .persona-q{font-size:13px;font-style:italic;color:var(--accent);border-top:1px solid var(--border);padding-top:var(--sp-3);margin:0;}
+  .excl-note{margin-top:var(--sp-4);font-size:13px;color:var(--text-soft);background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:var(--sp-3) var(--sp-4);}
+
+  .northstar{background:var(--surface-1);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:20px 22px;margin-bottom:var(--sp-5);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-4);}
+  .northstar .ns-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:700;margin-bottom:4px;}
+  .northstar .ns-val{font-size:26px;font-weight:700;}
+  .northstar .ns-note{font-size:12.5px;color:var(--text-soft);max-width:440px;}
+
+  table.metrics{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  table.metrics th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-soft);padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface-1);}
+  table.metrics td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);}
+  table.metrics tr:last-child td{border-bottom:none;}
+  table.metrics td.metric-name{font-weight:600;white-space:nowrap;}
+  table.metrics tr.added-row td{background:rgba(63,174,107,0.06);}
+  table.metrics code{background:var(--surface-1);padding:1px 5px;border-radius:4px;font-size:12px;}
+  table.metrics.compact{font-size:12.5px;}
+  table.metrics.compact td, table.metrics.compact th{padding:10px 14px;}
+  table.metrics td.id-cell{font-weight:700;color:var(--accent);white-space:nowrap;}
+
+  .footnote{font-size:12.5px;color:var(--text-soft);margin-top:var(--sp-4);max-width:760px;}
+
+  .pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5);}
+  .pillar-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .pillar-card .badge{width:30px;height:30px;border-radius:8px;background:var(--accent-subtle-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin-bottom:var(--sp-3);}
+  .pillar-card h3{margin:0 0 6px;font-size:15.5px;}
+  .pillar-card p{margin:0 0 var(--sp-3);font-size:13px;color:var(--text-soft);}
+  .pillar-card .feats{font-size:12px;color:var(--text);}
+  .pillar-card .feats span{display:block;margin-bottom:var(--sp-1);padding-left:var(--sp-3);position:relative;}
+  .pillar-card .feats span::before{content:"–";position:absolute;left:0;color:var(--text-muted);}
+  .pillar-card .feats span.new{color:var(--accent-hover);}
+  .pillar-card .feats span.new::before{content:"+";color:var(--status-green);font-weight:700;}
+  .pillar-card .dec-refs{margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--border);}
+
+  .riskgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-bottom:var(--sp-5);}
+  .risk-card{background:rgba(220,38,38,0.05);border:1px solid rgba(220,38,38,0.25);border-radius:12px;padding:20px;}
+  .risk-card h4{margin:0 0 var(--sp-3);font-size:15px;color:#B0332A;}
+  .scope-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .scope-card h4{margin:0 0 var(--sp-3);font-size:15px;color:var(--text);}
+  ul.risklist{margin:0;padding:0;list-style:none;}
+  ul.risklist li{font-size:13.5px;margin-bottom:9px;padding-left:0;color:var(--text-soft);}
+  ul.risklist li b{font-weight:700;color:var(--text);}
+  ul.scopelist{margin:0;padding:0;list-style:none;}
+  ul.scopelist li{font-size:13.5px;margin-bottom:9px;padding-left:20px;position:relative;color:var(--text-soft);}
+  ul.scopelist li::before{content:"✕";position:absolute;left:0;color:var(--status-red);font-size:11px;top:2px;}
+
+  .assum-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:var(--sp-5);}
+  .assum-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3) var(--sp-6);}
+  .assum-grid li{font-size:13.5px;margin-bottom:var(--sp-3);list-style:none;position:relative;padding-left:var(--sp-4);color:var(--text-soft);}
+  .assum-grid li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+  .brgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);}
+  .br-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .br-card h4{margin:0 0 var(--sp-3);font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);font-weight:700;}
+  .br-row{display:flex;gap:var(--sp-3);margin-bottom:10px;font-size:13.5px;}
+  .br-id{font-weight:700;color:var(--accent);white-space:nowrap;min-width:56px;}
+  .br-text{color:var(--text-soft);}
+  .gp-row{display:flex;gap:var(--sp-3);margin-bottom:10px;font-size:13.5px;}
+  .gp-id{font-weight:700;color:var(--accent);white-space:nowrap;min-width:56px;}
+
+  .status-summary{display:flex;align-items:center;gap:var(--sp-5);flex-wrap:wrap;margin-bottom:var(--sp-5);padding:18px 20px;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;}
+  .status-bar{flex:1;min-width:220px;height:8px;border-radius:999px;background:var(--border);overflow:hidden;display:flex;}
+  .status-bar span{height:100%;transition:width var(--t-dialog) var(--ease-out);}
+  .status-bar .seg-done{background:var(--status-green);}
+  .status-bar .seg-progress{background:var(--status-amber);}
+  .status-legend{display:flex;gap:var(--sp-5);flex-wrap:wrap;font-size:12.5px;color:var(--text-soft);}
+  .status-legend .lg{display:flex;align-items:center;gap:7px;}
+  .status-legend .sw{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .sw.done{background:var(--status-green);}
+  .sw.progress{background:var(--status-amber);}
+  .sw.todo{background:var(--status-todo);}
+
+  .filterbar{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-bottom:var(--sp-5);}
+  .filter-btn{
+    font-family:var(--font);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;
+    background:var(--surface-2);border:1px solid var(--border);color:var(--text-soft);cursor:pointer;
+    transition:all var(--t-hover) var(--ease-out);
+  }
+  .filter-btn:hover{border-color:var(--border-strong);color:var(--text);}
+  .filter-btn.active{background:var(--accent-subtle-bg);border-color:var(--accent);color:var(--accent);}
+  .filter-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(163,230,53,0.3);}
+
+  .phaselist{display:flex;flex-direction:column;gap:var(--sp-3);}
+  .phase{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color var(--t-hover) var(--ease-out);}
+  .phase:hover{border-color:var(--border-strong);}
+  .phase-head{
+    display:flex;align-items:center;gap:var(--sp-4);padding:16px 20px;cursor:pointer;
+    background:none;border:none;width:100%;text-align:left;font-family:var(--font);color:var(--text);
+  }
+  .phase-head:focus-visible{outline:none;box-shadow:inset 0 0 0 3px rgba(163,230,53,0.3);}
+  .phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .phase-dot.done{background:var(--status-green);}
+  .phase-dot.progress{background:var(--status-amber);}
+  .phase-dot.todo{background:var(--status-todo);}
+  .phase-id{font-size:11.5px;color:var(--text-muted);min-width:34px;}
+  .phase-name{font-size:14.5px;font-weight:600;flex:1;}
+  .phase-badge{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:999px;white-space:nowrap;}
+  .phase-badge.done{background:rgba(63,174,107,0.12);color:#2E8C55;}
+  .phase-badge.progress{background:rgba(224,160,48,0.15);color:#A16A1D;}
+  .phase-badge.todo{background:var(--status-todo-bg);color:var(--status-todo);}
+  .chev{width:16px;height:16px;color:var(--text-muted);transition:transform var(--t-toggle) var(--ease-out);flex-shrink:0;}
+  .phase.open .chev{transform:rotate(180deg);}
+  .phase-body{max-height:0;overflow:hidden;transition:max-height var(--t-toggle) var(--ease-out);}
+  .phase.open .phase-body{max-height:400px;}
+  .phase-body-inner{padding:0 20px 18px 44px;font-size:13px;color:var(--text-soft);}
+  .phase-body-inner p{margin:0 0 6px;}
+  .phase-body-inner .pnote{color:var(--accent);font-size:12.5px;margin-top:8px;}
+
+  .stackgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp-4);}
+  .stackcard{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:18px;transition:border-color var(--t-hover) var(--ease-out);}
+  .stackcard:hover{border-color:var(--border-strong);}
+  .stackcard .icon{width:34px;height:34px;border-radius:8px;background:var(--accent-subtle-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin-bottom:var(--sp-3);}
+  .stackcard h4{margin:0 0 2px;font-size:14.5px;}
+  .stackcard .cat{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:700;margin-bottom:var(--sp-2);}
+  .stackcard p{margin:0;font-size:12.5px;color:var(--text-soft);}
+
+  .pathgrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-top:var(--sp-6);}
+  .path-card{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .path-card h4{margin:0 0 var(--sp-2);font-size:14px;color:var(--accent);}
+  .path-card p{margin:0 0 var(--sp-2);font-size:13.5px;color:var(--text-soft);}
+
+  footer{padding:28px 0 50px;}
+  .footgrid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--sp-3);font-size:12px;color:var(--text-muted);}
+  .footcenter{text-align:center;width:100%;margin-top:6px;font-size:12px;color:var(--text-muted);}
+
+  @media(max-width:900px){
+    .wrap{padding:0 var(--sp-5);}
+    .topnav-inner{padding:var(--sp-3) var(--sp-5);}
+    .grid2{grid-template-columns:1fr;}
+    .subgrid{grid-template-columns:1fr;}
+    .persona-grid{grid-template-columns:1fr;}
+    .pillar-grid{grid-template-columns:1fr 1fr;}
+    .riskgrid{grid-template-columns:1fr;}
+    .assum-grid{grid-template-columns:1fr;}
+    .brgrid{grid-template-columns:1fr;}
+    .pathgrid{grid-template-columns:1fr;}
+    .stackgrid{grid-template-columns:1fr 1fr;}
+    .statgrid{grid-template-columns:1fr 1fr;}
+    h1.title{font-size:32px;}
+  }
+  @media(max-width:600px){
+    .pillar-grid,.stackgrid{grid-template-columns:1fr;}
+    .navlinks{display:none;}
+    .phase-name{font-size:13.5px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition-duration:0.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">SubSense / Expanded PRD</div>
+    <div class="navlinks">
+      <a href="#why">Why</a>
+      <a href="#who">Who</a>
+      <a href="#score">Score</a>
+      <a href="#what">What</a>
+      <a href="#guardrails">Guardrails</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#status">Build Status</a>
+      <a href="#stack">Tech Stack</a>
+    </div>
+    <div class="navmeta">v1.1 &middot; Expanded &middot; July 2026</div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AI Subscription Decision Platform</div>
+    <h1 class="title">SubSense</h1>
+    <p class="tagline">Most subscription tools tell you what you already spent. SubSense gets ahead of the charge — reading every renewal before it hits, explaining what it means in plain terms, and handing you a decision instead of another line item.</p>
+    <div class="pills">
+      <div class="pill orange"><span class="dot"></span> 7 of 15 phases done &rarr; Phase 7 next</div>
+      <div class="pill">18 governing docs &middot; Implementation Freeze baseline</div>
+    </div>
+    <div class="statgrid">
+      <div class="stat"><div class="num">3</div><div class="label">Primary user segments</div></div>
+      <div class="stat"><div class="num">5</div><div class="label">Product pillars</div></div>
+      <div class="stat"><div class="num">8</div><div class="label">Measurable MVP success metrics</div></div>
+      <div class="stat"><div class="num">P2</div><div class="label">Current build phase</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2 class="sec-title">Problem Statement &amp; Objective</h2>
+      <span class="sec-tag">The Why</span>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h4>Executive Summary</h4>
+        <p>SubSense is an AI-assisted subscription decision platform for individuals and small shared groups. It helps users understand recurring subscription spending, receive contextual renewal reminders, manage shared subscription payments, and make informed renewal decisions. The product focuses on awareness and decision support, not direct subscription control.</p>
+        <h4>Current Problem</h4>
+        <p>Modern users pay for recurring subscriptions across entertainment, productivity, AI tools, education, cloud services, fitness, and memberships. Because these payments renew automatically, awareness breaks down long before the decision ever gets made.</p>
+        <div class="subgrid">
+          <div>
+            <h5>Awareness gaps</h5>
+            <ul class="plain">
+              <li>Users forget renewal dates</li>
+              <li>Users underestimate annual spending</li>
+              <li>Duplicate or overlapping services go unnoticed</li>
+            </ul>
+          </div>
+          <div>
+            <h5>Decision gaps</h5>
+            <ul class="plain">
+              <li>Shared subscription payments become difficult to track</li>
+              <li>Cancellation decisions are delayed until after renewal</li>
+              <li>Existing tools mostly report spending after the fact</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="quote-card">
+          <h4>Vision</h4>
+          <p>Build the most trusted AI-assisted subscription decision platform that helps users understand recurring spending, stay informed before renewals, and make confident subscription decisions without taking control away from them.</p>
+        </div>
+        <div class="quote-card">
+          <h4>Mission</h4>
+          <p>Help users become aware of recurring subscription spending through timely reminders, financial context, and AI-assisted decision support — while ensuring users always remain in control of renewal, cancellation, sharing, and payment decisions.</p>
+        </div>
+        <div class="card">
+          <h4>Value Proposition</h4>
+          <ul class="plain">
+            <li>What am I paying for?</li>
+            <li>What renews soon?</li>
+            <li>How much does this cost me annually?</li>
+            <li>Is this subscription still worth reviewing?</li>
+            <li>Who owes what for shared subscriptions?</li>
+            <li>What should I pay attention to today?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px;">
+      <h4>Product Principles</h4>
+      <div class="subgrid">
+        <ul class="plain">
+          <li>User control first</li>
+          <li>Decision support over automation</li>
+          <li>Workflow first</li>
+          <li>Explainable AI</li>
+        </ul>
+        <ul class="plain">
+          <li>Savings before spending</li>
+          <li>MVP discipline</li>
+          <li>Email-first communication</li>
+          <li>Decision support, never decision execution</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="who">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">02</span>
+      <h2 class="sec-title">Who We Serve</h2>
+      <span class="sec-tag">The Who</span>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="pnum">SEGMENT 01 &middot; PRIMARY</div>
+        <h3>Individual subscriber</h3>
+        <p>Individuals with multiple recurring subscriptions across entertainment, productivity, AI tools, education, and utilities.</p>
+        <p class="persona-q">"What am I paying for, and what renews soon?"</p>
+      </div>
+      <div class="persona-card">
+        <div class="pnum">SEGMENT 02 &middot; PRIMARY</div>
+        <h3>Students &amp; professionals</h3>
+        <p>Users paying for AI, productivity, streaming, and learning subscriptions who need clarity without a finance background.</p>
+        <p class="persona-q">"Is this subscription still worth reviewing?"</p>
+      </div>
+      <div class="persona-card">
+        <div class="pnum">SEGMENT 03 &middot; SECONDARY</div>
+        <h3>Shared households</h3>
+        <p>Roommates, couples, families, and small friend groups splitting streaming, software, or membership costs.</p>
+        <p class="persona-q">"Who owes what for shared subscriptions?"</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px;">
+      <h4>Secondary Segments (full list)</h4>
+      <div class="subgrid">
+        <ul class="plain">
+          <li>Families sharing subscriptions</li>
+          <li>Roommates splitting streaming or software costs</li>
+        </ul>
+        <ul class="plain">
+          <li>Couples managing shared digital services</li>
+          <li>Small friend groups with recurring shared expenses</li>
+        </ul>
+      </div>
+    </div>
+    <div class="excl-note">Excluded from MVP: enterprise teams, large organizations, procurement departments, and full business spend management.</div>
+  </div>
+</section>
+
+<section class="sec" id="score">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">03</span>
+      <h2 class="sec-title">Score: Success Metrics</h2>
+      <span class="sec-tag">The Score</span>
+    </div>
+    <p class="sec-intro">Two decisions define this scorecard. DEC-040 measures activation and correctness — seven metrics covering onboarding, delivery, AI quality, and error rate. DEC-041 adds an eighth metric that none of the first seven capture: whether a user stays. Together they form a numeric pass/fail bar, not a task checklist, frozen alongside 01_Product_Strategy.</p>
+    <div class="northstar">
+      <div>
+        <div class="ns-label">Proposed North Star metric</div>
+        <div class="ns-val">Activation rate &ge; 80%</div>
+      </div>
+      <div class="ns-note">New accounts adding one subscription in their first session. Proposed only — all eight metrics below are weighted equally.</div>
+    </div>
+    <table class="metrics">
+      <tr><th>Metric</th><th>Target</th><th>Measured by</th></tr>
+      <tr><td class="metric-name">Activation rate</td><td>&ge; 80% of new accounts add one subscription within the first session</td><td>Onboarding flow analytics/event log</td></tr>
+      <tr><td class="metric-name">Time to first subscription</td><td>Median under 3 minutes from account creation to first saved subscription</td><td>Timestamp diff, account creation &rarr; <code>subscriptions</code> insert</td></tr>
+      <tr><td class="metric-name">Reminder delivery success rate</td><td>&ge; 99% of due reminders result in a delivered notification within 15 minutes of schedule</td><td><code>reminder_history</code> and <code>notifications</code> audit</td></tr>
+      <tr><td class="metric-name">AI insight generation success rate</td><td>&ge; 95% of AI requests return a usable recommendation, not a fallback state</td><td><code>ai_recommendations</code> success/fallback ratio</td></tr>
+      <tr><td class="metric-name">Shared payment completion rate</td><td>&ge; 90% of payment requests reach paid or archived within 14 days</td><td><code>payment_requests</code> status/age query</td></tr>
+      <tr><td class="metric-name">Core flow error rate</td><td>Under 1% of primary-flow requests return an unhandled error</td><td>Error logs / <code>audit_logs</code></td></tr>
+      <tr><td class="metric-name">Demo acceptance</td><td>All 12 Critical E2E scenarios pass with zero open Critical defects</td><td>QA sign-off per Exit Criteria</td></tr>
+      <tr class="added-row"><td class="metric-name">Day 30 retention rate <span class="tag">DEC-041</span></td><td>&ge; 40% of activated users still active 30 days later</td><td><code>users.last_login_at</code> vs. activation date</td></tr>
+    </table>
+    <p class="footnote">Retention context: renewal-triggered reminders alone leave a gap — a user with one or two subscriptions on far-apart renewal dates could go months without an email and have no reason to open SubSense. A monthly digest (sent to every user with a non-archived subscription, independent of renewal date) and a single lapsed-user re-engagement email (triggered past 45 days inactive, capped at one per rolling window) close that gap using the existing reminder infrastructure rather than a new subsystem, per GP-007 Reuse Before Creation. The 40% Day 30 target is directional for a capstone-scale MVP, not a benchmarked figure.</p>
+  </div>
+</section>
+
+<section class="sec" id="what">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">04</span>
+      <h2 class="sec-title">What We're Building</h2>
+      <span class="sec-tag">The What</span>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="badge">01</div>
+        <h3>Subscription awareness</h3>
+        <p>Know what subscriptions exist.</p>
+        <div class="feats">
+          <span>Searchable catalog + custom entry</span>
+          <span>Add, view, edit, archive lifecycle</span>
+          <span>INR/USD, 4 billing frequencies (monthly, every 28 days, yearly, custom)</span>
+          <span class="new">31-service catalog with real per-service branding (DEC-046)</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">02</div>
+        <h3>Renewal &amp; retention awareness</h3>
+        <p>Know when renewals occur — and keep hearing from SubSense between them.</p>
+        <div class="feats">
+          <span>Upcoming renewal visibility</span>
+          <span>8 reminder types, email-first via Resend</span>
+          <span>Post-renewal review prompt (fixed 3-day/9am-local offset, DEC-047)</span>
+          <span class="new">Monthly digest + lapsed re-engagement (DEC-041)</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">03</div>
+        <h3>Financial awareness</h3>
+        <p>Understand monthly and annual cost.</p>
+        <div class="feats">
+          <span>Monthly/annual equivalent calculations</span>
+          <span>Recurring spend insights</span>
+          <span>Decision Workspace financial context</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">04</div>
+        <h3>AI decision support</h3>
+        <p>Receive contextual, explainable insight before renewal.</p>
+        <div class="feats">
+          <span>Renewal review prompts</span>
+          <span>Duplicate subscription detection</span>
+          <span>Explainable, non-executing recommendations (BR-001)</span>
+          <span class="new">Varied, non-templated AI copy tone (DEC-045)</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">05</div>
+        <h3>Shared subscription management</h3>
+        <p>Track split amounts and reminder status.</p>
+        <div class="feats">
+          <span>Shared member management</span>
+          <span>Payment request status: pending &rarr; member-reported &rarr; owner-confirmed paid (DEC-037)</span>
+          <span>Rail-aware cancellation guidance: UPI AutoPay, card e-mandate, app-store, manual (DEC-032)</span>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="badge">+</div>
+        <h3>Premium &amp; capstone demo</h3>
+        <p>Non-production demonstration layer.</p>
+        <div class="feats">
+          <span>Razorpay Test Mode upgrade flow</span>
+          <span>Developer/Test Utilities</span>
+          <span>No live financial processing in MVP</span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px;">
+      <h4>AI Copy Tone (DEC-045)</h4>
+      <p style="font-size:13.5px;">Generated insight text varies sentence opening and structure across cards in the same session rather than reusing one template with the subscription name swapped in. Each figure is stated once per card. Contractions are permitted. No manufactured urgency in the copy itself — even for Critical renewal status, since the Renewal Urgency Indicator's color already carries that signal. Generated text avoids corporate filler and leads with the fact.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="guardrails">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">05</span>
+      <h2 class="sec-title">Guardrails</h2>
+      <span class="sec-tag">The How We Stay Honest</span>
+    </div>
+    <div class="riskgrid">
+      <div class="risk-card">
+        <h4>Key risks</h4>
+        <ul class="risklist">
+          <li><b>AI overreach</b> — mitigated by enforcing BR-001 in backend and frontend copy</li>
+          <li><b>RLS mistakes</b> — mitigated by testing owner/member/admin access paths</li>
+          <li><b>Scope expansion</b> — mitigated by MVP scope discipline and change control</li>
+          <li><b>Defects found too late</b> — mitigated by the Phase 9.5 mid-build stress checkpoint (DEC-033)</li>
+          <li><b>Payment confusion</b> — mitigated by labeling Razorpay as Test Mode everywhere</li>
+        </ul>
+      </div>
+      <div class="scope-card">
+        <h4>Explicitly out of scope (v1)</h4>
+        <ul class="scopelist">
+          <li>Automatic bank account or email scanning</li>
+          <li>Apple/Google subscription sync</li>
+          <li>Automated third-party cancellation execution</li>
+          <li>Production billing / live Razorpay payments</li>
+          <li>Browser extension, mobile app, enterprise administration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="brgrid" style="margin-bottom:24px;">
+      <div class="br-card">
+        <h4>Core Business Rules</h4>
+        <div class="br-row"><span class="br-id">BR-001</span><span class="br-text">AI never performs user actions.</span></div>
+        <div class="br-row"><span class="br-id">BR-002</span><span class="br-text">Only authenticated users may access subscription data.</span></div>
+        <div class="br-row"><span class="br-id">BR-006</span><span class="br-text">First login automatically provisions a user profile.</span></div>
+        <div class="br-row"><span class="br-id">BR-007</span><span class="br-text">Returning users must not create duplicate profiles.</span></div>
+        <div class="br-row"><span class="br-id">BR-008</span><span class="br-text">Authentication must complete before loading user-specific data.</span></div>
+      </div>
+      <div class="br-card">
+        <h4>Governance Principles</h4>
+        <div class="gp-row"><span class="gp-id">GP-001</span><span class="br-text">User Control First — users retain final control over financial decisions.</span></div>
+        <div class="gp-row"><span class="gp-id">GP-002</span><span class="br-text">Decision Support Over Automation — AI supports decisions but never executes.</span></div>
+        <div class="gp-row"><span class="gp-id">GP-003</span><span class="br-text">Simplicity Before Features — every feature solves a real user problem.</span></div>
+        <div class="gp-row"><span class="gp-id">GP-006</span><span class="br-text">Architecture Before Features — structural decisions stabilize before scope expands.</span></div>
+        <div class="gp-row"><span class="gp-id">GP-007</span><span class="br-text">Reuse Before Creation — existing patterns are reused before new ones are created.</span></div>
+      </div>
+    </div>
+
+    <div class="assum-card">
+      <h4 style="margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);">Dependencies &amp; assumptions</h4>
+      <ul class="assum-grid">
+        <li>Users are willing to manually enter subscriptions without bank/email auto-import <span class="tag">Assumption</span></li>
+        <li>AI model can produce high-confidence renewal insight from manually entered data alone <span class="tag">Assumption</span></li>
+        <li>Email-first reminders (no push/mobile app) are sufficient for MVP engagement <span class="tag">Assumption</span></li>
+        <li>Razorpay Test Mode is an acceptable substitute for live payment validation in this capstone context <span class="tag">Assumption</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="decisions">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">06</span>
+      <h2 class="sec-title">Key Decisions</h2>
+      <span class="sec-tag">The Record</span>
+    </div>
+    <p class="sec-intro">A curated selection from 08_Decision_Log_v1.54's full Active Decision Register (80 entries as of this update) — the decisions with the most direct bearing on what SubSense is and how it behaves. The full chronological record, including UX/architecture housekeeping decisions not shown here, lives in doc 08.</p>
+    <table class="metrics compact">
+      <tr><th>ID</th><th>Decision</th><th>Why it matters</th></tr>
+      <tr><td class="id-cell">DEC-001</td><td>SubSense is an AI-assisted subscription decision platform, not a generic tracker.</td><td>Focuses the product on decision support rather than passive logging.</td></tr>
+      <tr><td class="id-cell">DEC-002</td><td>Users retain final control over financial actions.</td><td>Protects trust; the founding guardrail behind BR-001 and GP-001/002.</td></tr>
+      <tr><td class="id-cell">DEC-004</td><td>SubSense does not cancel third-party subscriptions.</td><td>The app never controls external providers, only informs.</td></tr>
+      <tr><td class="id-cell">DEC-011</td><td>Google Sign-In is primary authentication.</td><td>Reduces onboarding friction; supported directly by Supabase Auth.</td></tr>
+      <tr><td class="id-cell">DEC-012</td><td>Supabase is the system of record.</td><td>Auth, Postgres, and RLS in one platform, sized for MVP build capacity.</td></tr>
+      <tr><td class="id-cell">DEC-015</td><td>Razorpay is Test Mode only for MVP.</td><td>Demonstrates the premium flow without live payment risk.</td></tr>
+      <tr><td class="id-cell">DEC-020</td><td>RLS and least-privilege access are enabled everywhere.</td><td>Protects data even if application logic fails.</td></tr>
+      <tr><td class="id-cell">DEC-031</td><td>Lean Access Architecture: direct Supabase client + RLS for CRUD; Edge Functions only for secret-bearing or cross-cutting logic.</td><td>Matches solo/part-time build capacity without loosening enforced business rules.</td></tr>
+      <tr><td class="id-cell">DEC-032</td><td>Subscriptions record a payment rail (UPI AutoPay, card e-mandate, app-store, manual) plus an optional reference note.</td><td>India-specific cancellation paths differ by rail; a UPI mandate can only be cancelled from the originating app, not by SubSense.</td></tr>
+      <tr><td class="id-cell">DEC-037</td><td>Shared payment requests: owner can set any status; a member can self-report paid, which then needs owner confirmation.</td><td>Resolves a conflict between the API and schema docs over who can mark a request paid.</td></tr>
+      <tr><td class="id-cell">DEC-038</td><td>Premium entitlement lives in three <code>user_profiles</code> fields, written only by the payment-verification function.</td><td>Gives premium status one authoritative source instead of an implied state.</td></tr>
+      <tr><td class="id-cell">DEC-039</td><td>Reminders evaluate in the user's own timezone; archived subscriptions are excluded; post-renewal check-in gets a real generation mechanism.</td><td>Closes gaps that would otherwise cause missed or duplicate reminder sends.</td></tr>
+      <tr><td class="id-cell">DEC-040</td><td>Added seven numeric MVP success metrics with explicit pass/fail targets.</td><td>Replaces a binary task checklist with a measurable release bar.</td></tr>
+      <tr><td class="id-cell">DEC-041</td><td>Added a Retention Strategy: active-user definition, Day 30 retention target, monthly digest, lapsed re-engagement.</td><td>None of DEC-040's seven metrics measured whether a user stays — this one does.</td></tr>
+      <tr><td class="id-cell">DEC-046</td><td>Catalog expanded from 10 to 31 services with real per-service logos; two new categories added.</td><td>Gives Add Subscription real branding and covers common India-market services.</td></tr>
+      <tr><td class="id-cell">DEC-047</td><td>Post-renewal check-in fires exactly 3 days after renewal at 9am local time; finalized copy for all 8 notification templates.</td><td>Removes an ambiguity that would otherwise force an implementation-time guess.</td></tr>
+      <tr><td class="id-cell">DEC-048</td><td>Registered <code>subsense.co.in</code> and a support email.</td><td>Unlocks real Supabase custom SMTP and Resend domain verification for trust-sensitive email.</td></tr>
+      <tr><td class="id-cell">DEC-049</td><td>Adopted "Ledger Dark" as the finalized visual direction, superseding the original Monochrome Precision palette.</td><td>A more literal financial-instrument/ledger read, chosen by the user from generated options.</td></tr>
+      <tr><td class="id-cell">DEC-050</td><td>Extended Ledger Dark to light-mode email surfaces (Auth and notification templates).</td><td>Keeps trust-sensitive, payment-adjacent email visually consistent with the in-app product.</td></tr>
+      <tr><td class="id-cell">DEC-051</td><td>Extended Ledger Dark light-mode consistency to doc 18 (One-Page PRD).</td><td>A published, shareable summary should carry the same brand consistency as the product itself.</td></tr>
+      <tr><td class="id-cell">DEC-053</td><td>Frontend tooling moved from Lovable to Cursor (with Claude Code); dropped the standalone Google API and Postman stack entries; added the registered domain as its own stack card.</td><td>Actual build practice had already moved to Cursor without a decision ever being recorded; Google Sign-In itself (DEC-011) is unaffected.</td></tr>
+      <tr><td class="id-cell">DEC-054</td><td>Renewal Urgency Indicator thresholds frozen: Critical at 2 days or fewer, Upcoming at 3-7 days, Normal beyond 7.</td><td>Gives the whole product one consistent definition of "soon," reusing the same windows reminders already rely on rather than a second, independently-tunable number.</td></tr>
+      <tr><td class="id-cell">DEC-059</td><td>Subscription cards render a fixed, generic category icon, never a real per-service brand logo; all 30 stored logo URLs nulled out.</td><td>A real trademark/IP concern raised by the user, even for a non-commercial capstone build — closed at the data layer, not just the rendering layer.</td></tr>
+      <tr><td class="id-cell">DEC-064</td><td>Added Paid/Paused/Resume quick-actions directly on the subscription card, alongside the existing View &rarr; Edit flow.</td><td>Paused subscriptions now genuinely stop counting toward renewal urgency and Recommended Reviews, closing a filter gap that previously only existed at the badge level.</td></tr>
+      <tr><td class="id-cell">DEC-065</td><td>Adopted "Cyber Lime" (lime-green primary accent, a blue accent reserved for the wordmark only) as the product's current visual identity, superseding the short-lived amber kit (DEC-057) that came before it.</td><td>Third visual identity in the product's history — this pass also wrote in an explicit 60-30-10 color-usage discipline rather than leaving accent restraint as an unstated assumption.</td></tr>
+      <tr><td class="id-cell">DEC-066</td><td>Retired the sign-in/sign-up screens' one-off particle background and glass-morphism card (DEC-056); every screen in the app now shares the same opaque card and button standard.</td><td>Closes the product's last remaining visual inconsistency between the pre-authentication screens and the rest of the app.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="status">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">07</span>
+      <h2 class="sec-title">Build Status</h2>
+      <span class="sec-tag">The Status</span>
+    </div>
+
+    <div class="status-summary">
+      <div class="status-bar" role="img" aria-label="7 of 15 phases done, 0 in progress, 8 not started">
+        <span class="seg-done" style="width:47%"></span>
+        <span class="seg-progress" style="width:0%"></span>
+      </div>
+      <div class="status-legend">
+        <span class="lg"><span class="sw done"></span>7 done</span>
+        <span class="lg"><span class="sw progress"></span>0 in progress</span>
+        <span class="lg"><span class="sw todo"></span>8 not started</span>
+      </div>
+    </div>
+
+    <div class="filterbar" role="group" aria-label="Filter phases by status">
+      <button class="filter-btn active" data-filter="all">All phases</button>
+      <button class="filter-btn" data-filter="done">Done</button>
+      <button class="filter-btn" data-filter="progress">In progress</button>
+      <button class="filter-btn" data-filter="todo">Not started</button>
+    </div>
+
+    <div class="phaselist" id="phaselist">
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P0</span>
+          <span class="phase-name">Repository and Environment Setup</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Repo, Supabase project, and third-party accounts (Razorpay, Resend, Google OAuth) live. OpenAI/Resend/Razorpay API keys stored as Supabase Edge Function secrets; project connected to Vercel with the GoDaddy-registered <code>subsense.co.in</code> domain linked via DNS and live in production.</p>
+          <p class="pnote">Both previously-outstanding items (OpenAI key, Vercel link) resolved this session — nothing left open here.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P1</span>
+          <span class="phase-name">Database Foundation</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Schema, ENUMs, RLS, and seed data implemented. Migration applied and live-verified against Supabase.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P2</span>
+          <span class="phase-name">Authentication and Profile</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Google Sign-In, first-login provisioning, profile/preferences load, protected routes. Email/password sign-in, sign-up, forgot-password, and reset-password added on top of the original Google-only scope (DEC-011 was always "primary," not "exclusive").</p>
+          <p class="pnote">Smoke-tested end to end with a real Google session and a real password-reset email round trip. A real auth-error-display bug (raw errors rendering as a literal "{}") was found and fixed along the way. The sign-in/sign-up screen has since gone through two full visual passes of its own (DEC-056, then DEC-065/066 — see the Key Decisions table) and now shares the same standard card/button treatment as the rest of the app.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P3</span>
+          <span class="phase-name">App Shell and Navigation</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Sidebar Navigation, profile menu, responsive app layout, and protected routing all built. The original single Global Header bar was later retired and replaced by an independent TopBar strip plus a floating TopBarActions cluster (DEC-061), to let Border Beam's ambient shell animation actually read across the full top edge.</p>
+          <p class="pnote">Smoke-tested with a real Google session: all 5 authenticated routes, active-route highlighting, sidebar collapse/mobile overlay, and the profile dropdown all confirmed working.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P4</span>
+          <span class="phase-name">Subscription Management</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>My Subscriptions, Add Subscription, Subscription Details, View &rarr; Edit, archive, and annual cost preview all built against the real (not placeholder) schema and RLS-scoped per user. Card-level Paid/Paused/Resume quick-actions later added alongside the View &rarr; Edit flow (DEC-064).</p>
+          <p class="pnote">Two real bugs found and fixed during build: an archive-confirm dialog's Cancel button that would have re-opened it instead of closing it, and unreadable white-on-white native <code>&lt;select&gt;</code> option text, replaced with a proper themed Select component across all 6 dropdowns. Verified end to end with a real Google session, including a bogus-subscription-ID case showing a clean error rather than crashing.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P5</span>
+          <span class="phase-name">Decision Workspace</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Primary product home built as <code>DecisionWorkspacePage.tsx</code>: Today's Financial Context, Upcoming Renewals, an "AI Insights" placeholder and a "Recommended Reviews" placeholder (together the initial AI insight state — real AI output is Phase 7/C-003), and Potential Savings/Shared Payment Activity placeholders.</p>
+          <p class="pnote">This card had gone stale at "Not started" long after the phase actually shipped — caught only when the user asked directly whether Phase 5 was done. Iterated on across three later DECs rather than shipped once: DEC-062 added the glow-card treatment to Today's Financial Context and Recommended Reviews; DEC-064 wired paused-subscription exclusion into Upcoming Renewals; DEC-067 fixed Upcoming Renewals' missing 7-day urgency filter and swapped Recommended Reviews from a real-data duplicate into an honest placeholder. All live-verified by the user against real Supabase data.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="done">
+        <button class="phase-head">
+          <span class="phase-dot done"></span>
+          <span class="phase-id">P6</span>
+          <span class="phase-name">Reminder Engine and Notifications</span>
+          <span class="phase-badge done">Done</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Reminder scheduling (Supabase Cron, hourly send / daily generation split, DEC-068), Resend email delivery, notification/history tracking, monthly digest and lapsed re-engagement jobs — all built, migrated, deployed, and live-verified against the production Supabase project and real delivered emails.</p>
+          <p class="pnote">This card had gone stale at "Not started" long after the phase actually shipped, caught during a direct evidence-checked Phase 1-6 audit (not doc 19's self-reported status). One named deliverable, Send Reminder Now in Developer/Test Utilities, has a working underlying capability (live-verified multiple times) but no in-app UI yet — deliberately deferred to Phase 11, where doc 16 already groups it with four other utilities (DEC-078). Two real reminder-lifecycle bugs found live and fixed (DEC-070, DEC-071); a Supabase new-format secret key 401 and a missing Resend sender-address 403 were also found and fixed.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P7</span>
+          <span class="phase-name">AI Decision Support</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>OpenAI-generated insights, AI recommendation persistence, Decision Workspace + Subscription Details presentation.</p>
+          <p class="pnote">Prompt design follows the AI Copy Tone guidance (DEC-045).</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P8</span>
+          <span class="phase-name">Shared Subscriptions</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Shared member add/edit/remove, amount-owed tracking, paid/pending status, split reminders.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P9</span>
+          <span class="phase-name">Insights</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Spend summaries, category breakdown, savings opportunities, AI insight summary.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P9.5</span>
+          <span class="phase-name">Mid-Build Stress Test Checkpoint</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>RLS, Edge Function auth, accessibility, and demo-critical load paths verified before Phase 10 (DEC-033).</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P10</span>
+          <span class="phase-name">Premium Demonstration</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Razorpay Test Mode upgrade flow, payment transaction record, premium status UI. No live payment processing.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P11</span>
+          <span class="phase-name">Developer/Test Utilities</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Send Reminder Now, Test AI Response, Test Email Payload, Test Razorpay Payment, integration status view.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P12</span>
+          <span class="phase-name">Testing and QA</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>RTM coverage, E2E flows, security/RLS checks, accessibility checks, UAT sign-off.</p>
+        </div></div>
+      </div>
+      <div class="phase" data-status="todo">
+        <button class="phase-head">
+          <span class="phase-dot todo"></span>
+          <span class="phase-id">P13</span>
+          <span class="phase-name">Deployment</span>
+          <span class="phase-badge todo">Not started</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="phase-body"><div class="phase-body-inner">
+          <p>Staging deploy, environment validation, smoke tests, production deploy after approval, rollback plan.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="stack" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">08</span>
+      <h2 class="sec-title">Tech Stack &amp; Architecture</h2>
+      <span class="sec-tag">The How (Build)</span>
+    </div>
+    <div class="stackgrid">
+      <div class="stackcard"><div class="icon">CR</div><h4>Cursor</h4><div class="cat">App builder</div><p>AI-assisted local development (with Claude Code) for the product's frontend, building directly against the Subsense-web repo.</p></div>
+      <div class="stackcard"><div class="icon">SB</div><h4>Supabase</h4><div class="cat">Backend &amp; DB</div><p>Postgres, Auth, RLS, and Edge Functions.</p></div>
+      <div class="stackcard"><div class="icon">CL</div><h4>Claude</h4><div class="cat">AI reasoning</div><p>Architecture, documentation, and build reasoning support.</p></div>
+      <div class="stackcard"><div class="icon">AI</div><h4>OpenAI API</h4><div class="cat">AI model</div><p>Renewal insight generation and duplicate detection.</p></div>
+      <div class="stackcard"><div class="icon">RP</div><h4>Razorpay</h4><div class="cat">Payments</div><p>Test Mode premium demonstration only.</p></div>
+      <div class="stackcard"><div class="icon">VC</div><h4>Vercel</h4><div class="cat">Hosting</div><p>Deployment and hosting for the web application.</p></div>
+      <div class="stackcard"><div class="icon">GH</div><h4>GitHub</h4><div class="cat">Version control</div><p>Source control and CI/CD pipeline.</p></div>
+      <div class="stackcard"><div class="icon">RS</div><h4>Resend</h4><div class="cat">Email</div><p>Transactional email for reminders and digests.</p></div>
+      <div class="stackcard"><div class="icon">DM</div><h4>Domain</h4><div class="cat">Trust &amp; email</div><p>subsense.co.in — registered business domain and support email, DEC-048.</p></div>
+    </div>
+    <div class="pathgrid">
+      <div class="path-card">
+        <h4>Path A — Direct Data Access</h4>
+        <p>The frontend uses the Supabase client (<code>supabase-js</code>) directly for user-owned CRUD: profile, preferences, subscriptions, shared subscriptions, members, payment requests, and reads of reminders/notifications/AI output/catalog. Row Level Security is the enforcement layer — RLS stands in for a Repository/Service layer for these simple, owner-scoped operations.</p>
+      </div>
+      <div class="path-card">
+        <h4>Path B — Edge Function APIs</h4>
+        <p>Supabase Edge Functions using the service-role key handle anything touching a provider secret (OpenAI, Resend, Razorpay), anything running on a schedule, and any write to system-owned tables (<code>ai_recommendations</code>, <code>notifications</code>, <code>reminder_history</code>, <code>audit_logs</code>, <code>payment_transactions</code>).</p>
+      </div>
+    </div>
+    <p class="footnote">This is DEC-031's Lean Access Architecture: two access paths rather than one uniform pipeline, sized to match solo/part-time build capacity without loosening enforced business rules. Across both paths: the frontend never talks directly to OpenAI, Resend, or Razorpay; provider keys and the service-role key never reach the frontend; JWT is the trust boundary for both paths; Supabase remains the single system of record.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footgrid">
+      <div>SUBSENSE — EXPANDED PRD</div>
+      <div>Prepared for Product, Design &amp; Engineering alignment</div>
+    </div>
+    <div class="footcenter">Created by Ujjwal Chakrabarti &middot; Expands on 18_SubSense_One_Page_PRD, sourced from the full governing document set (00&ndash;16)</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.querySelectorAll('.phase-head').forEach(function(btn){
+    btn.setAttribute('aria-expanded','false');
+    btn.addEventListener('click', function(){
+      var phase = btn.closest('.phase');
+      var isOpen = phase.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  var buttons = document.querySelectorAll('.filter-btn');
+  var phases = document.querySelectorAll('.phase');
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){
+      buttons.forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      var f = b.getAttribute('data-filter');
+      phases.forEach(function(p){
+        p.style.display = (f === 'all' || p.getAttribute('data-status') === f) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

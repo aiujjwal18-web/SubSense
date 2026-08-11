@@ -1,0 +1,208 @@
+-- 30_SubSense_Post_Renewal_Checkin_Paused_Fix_v1.0.sql
+-- Implements DEC-071: closes a narrow residual gap left by DEC-070. generate_scheduled_
+-- reminders() (28_SubSense_Scheduled_Reminders_Patch_v1.0.sql)'s post_renewal_checkin
+-- query filtered on s.archived_at is null and u.account_status = 'active', but never
+-- checked the subscription's own lifecycle_status. DEC-070's new cancel trigger only
+-- reacts to the *transition into* 'paused' -- it does nothing to stop this daily job from
+-- generating a brand-new post_renewal_checkin later, if a paused subscription's (now-
+-- frozen) next_renewal_date happens to land exactly 3 days in the past on some
+-- subsequent day the cron runs. Found by walking through DEC-070's fix state-by-state,
+-- not from live evidence -- a narrow edge case (requires the subscription to still be
+-- paused on the exact day 3 days after its frozen renewal date), but the same category
+-- of gap DEC-070 itself closed for the three generate_default_reminders() types.
+--
+-- Single-step file -- no enum change this time, just one query-clause addition inside an
+-- existing function body. Safe to re-run (CREATE OR REPLACE FUNCTION).
+ 
+create or replace function public.generate_scheduled_reminders()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  rec record;
+  rows_written integer;
+  post_renewal_inserted integer := 0;
+  post_renewal_failed integer := 0;
+  monthly_digest_inserted integer := 0;
+  monthly_digest_failed integer := 0;
+  lapsed_inserted integer := 0;
+  lapsed_failed integer := 0;
+begin
+  -- (a) post_renewal_checkin: subscriptions that renewed exactly 3 days ago.
+  -- DEC-071: added "s.lifecycle_status <> 'paused'" -- previously this loop would
+  -- generate a fresh post_renewal_checkin for a paused subscription if its frozen
+  -- next_renewal_date happened to land on the 3-days-ago mark on a later cron run,
+  -- since nothing here checked lifecycle_status at all.
+  for rec in
+    select
+      s.id as subscription_id,
+      s.user_id,
+      coalesce(p.timezone, 'Asia/Kolkata') as tz
+    from public.subscriptions s
+    join public.users u on u.id = s.user_id
+    left join public.user_profiles p on p.user_id = s.user_id
+    where s.archived_at is null
+      and s.lifecycle_status <> 'paused'
+      and u.account_status = 'active'
+      and s.next_renewal_date = current_date - 3
+  loop
+    begin
+      insert into public.reminders (user_id, subscription_id, reminder_type, scheduled_for, timezone_snapshot)
+      values (
+        rec.user_id,
+        rec.subscription_id,
+        'post_renewal_checkin',
+        public.local_date_at_9am_tz(current_date, rec.tz),
+        rec.tz
+      )
+      on conflict do nothing;
+      get diagnostics rows_written = row_count;
+      post_renewal_inserted := post_renewal_inserted + rows_written;
+    exception when others then
+      post_renewal_failed := post_renewal_failed + 1;
+      begin
+        insert into public.audit_logs (actor_type, action, entity_table, entity_id, metadata)
+        values (
+          'service',
+          'reminder_generation_failed',
+          'subscriptions',
+          rec.subscription_id,
+          jsonb_build_object(
+            'reminder_type', 'post_renewal_checkin',
+            'error_code', 'GEN_001',
+            'error_message', sqlerrm
+          )
+        );
+      exception when others then
+        null;
+      end;
+    end;
+  end loop;
+ 
+  -- (b) monthly_digest: unchanged from 28_SubSense_Scheduled_Reminders_Patch_v1.0.sql --
+  -- user-level, not subscription-anchored, not affected by a single subscription's
+  -- paused state.
+  for rec in
+    select
+      u.id as user_id,
+      coalesce(p.timezone, 'Asia/Kolkata') as tz
+    from public.users u
+    left join public.user_profiles p on p.user_id = u.id
+    where u.account_status = 'active'
+      and exists (
+        select 1 from public.subscriptions s
+        where s.user_id = u.id and s.archived_at is null
+      )
+      and not exists (
+        select 1 from public.reminders r
+        where r.user_id = u.id
+          and r.reminder_type = 'monthly_digest'
+          and r.status in ('pending', 'sent')
+          and date_trunc('month', r.scheduled_for at time zone coalesce(p.timezone, 'Asia/Kolkata'))
+            = date_trunc('month', now() at time zone coalesce(p.timezone, 'Asia/Kolkata'))
+      )
+  loop
+    begin
+      insert into public.reminders (user_id, subscription_id, payment_request_id, reminder_type, scheduled_for, timezone_snapshot)
+      values (
+        rec.user_id,
+        null,
+        null,
+        'monthly_digest',
+        public.local_date_at_9am_tz(current_date, rec.tz),
+        rec.tz
+      );
+      monthly_digest_inserted := monthly_digest_inserted + 1;
+    exception when others then
+      monthly_digest_failed := monthly_digest_failed + 1;
+      begin
+        insert into public.audit_logs (actor_type, action, entity_table, entity_id, metadata)
+        values (
+          'service',
+          'reminder_generation_failed',
+          'users',
+          rec.user_id,
+          jsonb_build_object(
+            'reminder_type', 'monthly_digest',
+            'error_code', 'GEN_001',
+            'error_message', sqlerrm
+          )
+        );
+      exception when others then
+        null;
+      end;
+    end;
+  end loop;
+ 
+  -- (c) lapsed_reengagement: unchanged from 28_SubSense_Scheduled_Reminders_Patch_v1.0.sql
+  -- -- same reasoning as (b), user-level not subscription-level.
+  for rec in
+    select
+      u.id as user_id,
+      coalesce(p.timezone, 'Asia/Kolkata') as tz
+    from public.users u
+    left join public.user_profiles p on p.user_id = u.id
+    where u.account_status = 'active'
+      and (
+        (u.last_login_at is not null and u.last_login_at < now() - interval '45 days')
+        or (u.last_login_at is null and u.created_at < now() - interval '45 days')
+      )
+      and not exists (
+        select 1 from public.reminders r
+        where r.user_id = u.id
+          and r.reminder_type = 'lapsed_reengagement'
+          and r.status in ('pending', 'sent')
+          and r.scheduled_for > now() - interval '45 days'
+      )
+  loop
+    begin
+      insert into public.reminders (user_id, subscription_id, payment_request_id, reminder_type, scheduled_for, timezone_snapshot)
+      values (
+        rec.user_id,
+        null,
+        null,
+        'lapsed_reengagement',
+        public.local_date_at_9am_tz(current_date, rec.tz),
+        rec.tz
+      );
+      lapsed_inserted := lapsed_inserted + 1;
+    exception when others then
+      lapsed_failed := lapsed_failed + 1;
+      begin
+        insert into public.audit_logs (actor_type, action, entity_table, entity_id, metadata)
+        values (
+          'service',
+          'reminder_generation_failed',
+          'users',
+          rec.user_id,
+          jsonb_build_object(
+            'reminder_type', 'lapsed_reengagement',
+            'error_code', 'GEN_001',
+            'error_message', sqlerrm
+          )
+        );
+      exception when others then
+        null;
+      end;
+    end;
+  end loop;
+ 
+  return jsonb_build_object(
+    'post_renewal_checkin', jsonb_build_object('inserted', post_renewal_inserted, 'failed', post_renewal_failed),
+    'monthly_digest', jsonb_build_object('inserted', monthly_digest_inserted, 'failed', monthly_digest_failed),
+    'lapsed_reengagement', jsonb_build_object('inserted', lapsed_inserted, 'failed', lapsed_failed)
+  );
+end;
+$$;
+ 
+-- Notes for whoever runs this file:
+--
+-- - Single change from the version shipped in file 28: "and s.lifecycle_status <> 'paused'"
+--   added to the post_renewal_checkin loop's WHERE clause. Everything else (monthly_digest,
+--   lapsed_reengagement, the exception-handling/audit-log pattern, the returned jsonb
+--   summary shape) is byte-for-byte the same as file 28's version.
+-- - Safe to re-run (CREATE OR REPLACE FUNCTION).
+-- - No backfill: any post_renewal_checkin rows already generated for a paused subscription
+--   before this fix are left as-is (same "no retroactive cleanup" convention as file 29).

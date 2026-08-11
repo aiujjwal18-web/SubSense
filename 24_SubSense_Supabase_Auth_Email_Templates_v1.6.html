@@ -1,0 +1,334 @@
+<!-- ============================================================
+     SubSense — Supabase Auth Email Templates v1.6
+     Brand: "Cyber Lime" (DEC-065), light-mode variant, resolved for
+     email use under DEC-073 (superseding the original "Ledger Dark"
+     light-mode/email tokens these templates shipped with — DEC-057
+     and DEC-065 each carried that gap forward unchanged in-app only).
+     DEC-075 adds TEMPLATE 4 (Password changed), a Security
+     notification rather than an auth-flow template — see its own
+     header comment below for the Supabase dashboard-location
+     distinction and the {{ .Email }}/{{ .SiteURL }} variables it
+     uses instead of {{ .ConfirmationURL }}.
+     DEC-074 designed a logo-icon-plus-text header treatment (see its
+     v1.4 Version History entry below for the exact markup) but the
+     user decided not to implement it during the capstone build —
+     revisit only if the product continues past capstone. The header
+     below stays text-only, matching what's actually live.
+     per 05_Design_System_v1.31 Color Palette note: "Light-mode
+     counterparts — for surfaces that must render on white
+     (Resend email templates, share previews; the product itself
+     remains dark-first)."
+     Tokens used: Page (light) #FFFFFF, Surface (light) #F1F5F9,
+     Border (light) #E2E8F0, Text Primary (light) #0F172A,
+     Text Secondary (light) #64748B, Accent Fill (light) #A3E635
+     (button background only), Accent Text (light) #4D7C0F (wordmark
+     span only — a darkened same-hue derivative of Primary #A3E635,
+     since the raw hex fails WCAG AA as text on white at ~1.9:1
+     contrast; the derivative reaches ~5:1). Button label text is
+     Text Primary (light) #0F172A, not white, mirroring the in-app
+     Primary button's dark-text-on-lime rule (DEC-065).
+     Typography: IBM Plex Sans throughout, including the "SubSense"
+     wordmark span, per DEC-055 (wordmark font resolved to IBM Plex
+     Sans; Space Grotesk remains an installed-but-unused dependency,
+     not part of the shipped brand) — web-safe fallback stack, since
+     custom fonts are unreliable across email clients.
+     Paste TEMPLATES 1-3 into Supabase Dashboard -> Authentication
+     -> Emails -> Templates. TEMPLATE 4 (Password changed) is a
+     Security notification instead, pasted into Supabase Dashboard
+     -> Authentication -> Emails -> Security notifications, and
+     that notification must be individually enabled at the project
+     level or Supabase won't send it regardless of content.
+     ============================================================ -->
+
+<!-- ============================================================
+     Version History
+     v1.0 — Initial email template set (light-mode Ledger Dark),
+       wordmark rendered in Space Grotesk per DEC-049's then-open
+       logo exception.
+     v1.1 — Housekeeping + correction, not tied to a new DEC beyond
+       DEC-055 itself: fixed the stale 05_Design_System_v1.13
+       citation to v1.19, and corrected the wordmark span in all
+       three templates from Space Grotesk to IBM Plex Sans, since
+       DEC-055 resolved the wordmark font question against Space
+       Grotesk. Found via a full-folder citation-staleness grep
+       audit; no layout, color, or copy content changed.
+       Further correction (DEC-056 cascade): the 05_Design_System
+       citation updated to v1.20. Further correction (DEC-057 brand
+       kit cascade): updated again to v1.21. Neither correction
+       changes this file's own content — DEC-057 deliberately left
+       light-mode/email tokens unchanged, on Ledger Dark, pending a
+       future decision; only the citation to 05 itself moved.
+       Further correction (DEC-058 motion-system cascade): updated
+       again to v1.22. DEC-058 concerns main-app motion/background
+       treatment only and does not touch this file's light-mode
+       tokens; only the citation moved again.
+       Further correction (DEC-059 generic-icon cascade): updated
+       again to v1.23. DEC-059 concerns subscription-catalog icon
+       rendering only and does not touch this file's light-mode
+       tokens; only the citation moved again.
+       Further correction (DEC-060/061 logo-asset and Header-
+       restructure cascade): updated again to v1.25. Neither DEC
+       touches this file's light-mode tokens or its IBM Plex Sans
+       wordmark treatment (the main app's logo/wordmark changes are
+       scoped to the in-app and pre-authentication contexts, not the
+       light-mode email surface); only the citation moved again.
+       Further correction (DEC-062/063/064 cascade): updated again
+       to v1.28. None of the three (glow-card dual meaning, gradient
+       button adoption, Paid/Paused quick-actions) touch this file's
+       light-mode tokens or typography; only the citation moved again.
+     v1.2 — Recorded DEC-072 (08_Decision_Log_v1.44). This file's own
+       3 templates below are unchanged in content — DEC-072 corrected
+       a live drift where they'd been pasted into Supabase as plain
+       unstyled HTML instead of this file's actual branded markup;
+       the fix was re-pasting the existing blocks below, verbatim.
+       Separately: Supabase auto-generates a 4th auth template,
+       "Confirm your new email address" (the change-email flow),
+       that this file has never specified. Decision (DEC-072): leave
+       it as Supabase's plain default copy for now — a 4th branded
+       template is out of MVP scope, not an oversight. If revisited,
+       it would follow the same TEMPLATE 1-3 structure below (white
+       card, #A3E635 button with #0F172A text, IBM Plex Sans, footer
+       note), subject line "Confirm your new email for SubSense",
+       using Supabase's {{ .NewEmail }} and {{ .ConfirmationURL }}
+       template variables.
+     v1.3 — Recorded DEC-073 (08_Decision_Log_v1.45). Resolved the
+       light-mode/email accent gap DEC-057 opened and DEC-065 carried
+       forward unchanged a second time — prompted by the user noticing
+       these just-repasted (v1.2/DEC-072) templates still rendered in
+       the original Ledger Dark blue (#1E40AF) against the app's
+       current Cyber Lime look. All 3 templates recolored: wordmark
+       span from #1E40AF to #4D7C0F (Accent Text light, a text-safe
+       darkened derivative of Primary #A3E635 — the raw hex fails
+       WCAG AA as text on white); button background from #1E40AF to
+       #A3E635 (Accent Fill light, raw Primary hex), button text from
+       white to #0F172A (Text Primary light), mirroring the in-app
+       Primary button's dark-text-on-lime rule rather than inventing
+       a new one. No layout, copy, or structural change — colors only.
+     v1.4 — Recorded DEC-074 (08_Decision_Log). Designed a logo-icon-
+       plus-text header treatment for all 3 templates (real logo icon
+       next to the existing text wordmark, not replacing it — a small
+       nested table for Outlook compatibility, icon hosted at a fixed
+       public URL rather than the normal hashed build path). **Not
+       implemented this pass:** the user decided against shipping it
+       during the capstone phase — the exact markup is preserved here
+       for reference, but the templates below stay text-only, matching
+       what's actually live in Supabase. Revisit only if the product
+       continues past capstone. Reference markup, for that future
+       revisit:
+       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0;">
+         <tr>
+           <td style="padding-right:8px; vertical-align:middle;">
+             <img src="https://subsense.co.in/logo-icon.png" width="24" height="22" alt="SubSense" style="display:block; border:0;">
+           </td>
+           <td style="vertical-align:middle;">
+             <span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+           </td>
+         </tr>
+       </table>
+       (swap in for the plain `<span>` header in each template below;
+       also requires copying `src/assets/subsense-logo-icon.png` into
+       Subsense-web's `public/` folder as a fixed-path static asset.)
+     v1.5 — Recorded DEC-075 (08_Decision_Log). Adds TEMPLATE 4,
+       "Password changed" — closes the open item DEC-072 flagged
+       and NEXT_SESSION_AGENDA.md carried forward: Supabase's
+       Security notifications section (a dashboard area distinct
+       from the Templates tab TEMPLATES 1-3 live in) includes a
+       "Password changed" notification that was previously left as
+       Supabase's plain, unstyled default. Styled to match TEMPLATES
+       1-3 exactly (white card, IBM Plex Sans, #4D7C0F wordmark,
+       #A3E635/#0F172A button). Content differs from TEMPLATES 1-3
+       in one structural way: this notification has no
+       {{ .ConfirmationURL }} (it's informational — the password
+       change already happened — not a confirm-action flow), so the
+       CTA links to the app's own forgot-password route instead,
+       using {{ .SiteURL }}/auth/forgot-password (confirmed live at
+       that path in Subsense-web's router). Subject line matches
+       Supabase's own default, "Your password was changed." This is
+       a docs-only deliverable — the user still needs to (1) paste
+       the block below into Security notifications, not Templates,
+       and (2) enable the Password changed notification toggle at
+       the project level, since Supabase won't send it otherwise
+       regardless of content.
+     v1.6 — Recorded DEC-077 (08_Decision_Log). While live-testing
+       TEMPLATE 4/DEC-075, the user correctly identified they had no
+       way to trigger or test TEMPLATE 2 (Magic link) through the
+       app. Confirmed via a full-codebase grep (`signInWithOtp`,
+       zero hits) that Magic Link sign-in was never actually
+       implemented as an in-app auth method — DEC-011 only locked in
+       Google as primary; email/password was added later; Magic Link
+       was never separately scoped. TEMPLATE 2's own header comment
+       updated to flag this explicitly. Decision: defer scoping real
+       Magic Link sign-in until/unless SubSense continues past
+       capstone, same deliberate MVP discipline as DEC-074's logo
+       icon deferral. No template content changed — flag note only.
+     ============================================================ -->
+
+
+<!-- ============================================================
+     TEMPLATE 1 — Confirm signup
+     Subject: Confirm your email for SubSense
+     ============================================================ -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px; text-align:left;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">Confirm your email</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          One step to activate your SubSense account — confirm this email address and you're in.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{ .ConfirmationURL }}"
+           style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">
+          Confirm email
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">
+          If you didn't create a SubSense account, you can ignore this — nothing happens until it's confirmed.
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================================
+     TEMPLATE 2 — Magic link
+     Subject: Your SubSense sign-in link
+     Note (DEC-077): styled and kept ready, but Magic Link sign-in
+     is NOT actually implemented anywhere in Subsense-web as of this
+     note — confirmed via a full-codebase grep for `signInWithOtp`
+     (zero references). Nothing in the app currently triggers
+     Supabase to send this template; it can't be tested through the
+     app's own UI. Deliberately deferred, not an oversight — scope
+     this only if/when SubSense continues past capstone.
+     ============================================================ -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px; text-align:left;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">Sign in to SubSense</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          Here's your sign-in link. It works once and expires shortly, so use it soon.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{ .ConfirmationURL }}"
+           style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">
+          Sign in
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">
+          Didn't request this? Ignore it — your account is unchanged.
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================================
+     TEMPLATE 3 — Reset password
+     Subject: Reset your SubSense password
+     ============================================================ -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px; text-align:left;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">Reset your password</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          Use this link to set a new password. It expires shortly, so don't wait too long.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{ .ConfirmationURL }}"
+           style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">
+          Reset password
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">
+          Didn't request this? Ignore it — your password stays the same.
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ============================================================
+     TEMPLATE 4 — Password changed (Security notification)
+     Subject: Your password was changed
+     Location: Supabase Dashboard -> Authentication -> Emails ->
+     Security notifications (NOT the Templates tab TEMPLATES 1-3
+     live in). Must be individually enabled at the project level.
+     Variables: {{ .Email }} (the account's email) and
+     {{ .SiteURL }} (the app's configured Site URL) — this
+     notification type has no {{ .ConfirmationURL }}, since it's
+     informational rather than a confirm-action flow.
+     ============================================================ -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px; text-align:left;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">Your password was changed</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          The password for your SubSense account ({{ .Email }}) was just changed. If you made this change, there's nothing else to do.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{ .SiteURL }}/auth/forgot-password"
+           style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">
+          Wasn't you? Reset password
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">
+          If you didn't make this change, reset your password immediately and contact us at support@subsense.co.in.
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,327 @@
+<!-- ============================================================
+     SubSense — Resend Notification Email Templates v1.3
+     Brand: "Cyber Lime" (DEC-065), light-mode variant, resolved for
+     email use under DEC-073/its doc-25 extension (superseding the
+     original "Ledger Dark" light-mode/email tokens this file shipped
+     with — DEC-057 and DEC-065 each carried that gap forward
+     unchanged in-app only; DEC-073 first resolved it for doc 24's
+     auth templates, this update extends the same resolution here).
+     per 05_Design_System_v1.31 Color Palette note: "Light-mode
+     counterparts — for surfaces that must render on white
+     (Resend email templates, share previews; the product itself
+     remains dark-first)."
+     Tokens: Page (light) #FFFFFF, Surface (light) #F1F5F9,
+     Border (light) #E2E8F0, Text Primary (light) #0F172A,
+     Text Secondary (light) #64748B, Accent Fill (light) #A3E635
+     (CTA button background only), Accent Text (light) #4D7C0F
+     (wordmark span only — a darkened same-hue derivative of Primary
+     #A3E635, since the raw hex fails WCAG AA as text on white at
+     ~1.9:1 contrast; the derivative reaches ~5:1). CTA button label
+     text is Text Primary (light) #0F172A, not white, mirroring the
+     in-app Primary button's dark-text-on-lime rule (DEC-065).
+     Typography: IBM Plex Sans throughout, including the "SubSense"
+     wordmark span — web-safe fallback stack included. Per DEC-055,
+     the wordmark font is IBM Plex Sans, not Space Grotesk (which
+     remains an installed-but-unused dependency).
+
+     Version History:
+     v1.0 — Initial notification template shell, wordmark rendered
+       in Space Grotesk per DEC-049's then-open logo exception.
+     v1.1 — Housekeeping correction, not tied to a new DEC beyond
+       DEC-055 itself: corrected the wordmark span in all six
+       templates from Space Grotesk to IBM Plex Sans, since DEC-055
+       resolved the wordmark font question against Space Grotesk.
+       Found via a full-folder citation-staleness grep audit; no
+       layout, color, or copy content changed.
+     v1.2 — Extends DEC-073 (08_Decision_Log_v1.45, originally scoped
+       to doc 24's 3 auth templates) to this file's 7 reminder
+       templates: wordmark span recolored from #1E40AF to #4D7C0F
+       (Accent Text light); CTA button background recolored from
+       #1E40AF to #A3E635 (Accent Fill light), button text from white
+       to #0F172A (Text Primary light). No layout, copy, or structural
+       change — colors only. Note: this file is reference markup only
+       (see "HOW THIS DIFFERS FROM DOC 24" below) — the live send path
+       is `Subsense-web/supabase/functions/_shared/email-template.ts`,
+       which hardcodes this same shell independently and needs the
+       identical color edit applied there via Claude Code for the
+       actual product to match; that is a separate, not-yet-applied
+       code change, tracked in NEXT_SESSION_AGENDA.md.
+     v1.3 — Recorded DEC-074 (08_Decision_Log). Designed a logo-icon-
+       plus-text header treatment for all 7 templates (same nested-
+       table pattern as doc 24, for Outlook compatibility). **Not
+       implemented this pass:** the user decided against shipping it
+       during the capstone phase — templates below stay text-only,
+       matching the live `_shared/email-template.ts` shell (which was
+       never edited for this). Revisit only if the product continues
+       past capstone. Reference markup, for that future revisit:
+       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0;">
+         <tr>
+           <td style="padding-right:8px; vertical-align:middle;">
+             <img src="https://subsense.co.in/logo-icon.png" width="24" height="22" alt="SubSense" style="display:block; border:0;">
+           </td>
+           <td style="vertical-align:middle;">
+             <span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+           </td>
+         </tr>
+       </table>
+       (swap in for the plain `<span>` header in each template below;
+       also requires copying `src/assets/subsense-logo-icon.png` into
+       Subsense-web's `public/` folder as a fixed-path static asset,
+       and the identical edit applied to `_shared/email-template.ts`.)
+
+     HOW THIS DIFFERS FROM DOC 24 (Supabase auth templates):
+     Supabase templates get pasted whole into the dashboard and
+     sent as-is. These do NOT — notification_templates.subject
+     and .body (23_SubSense_Notification_Copy_Patch_v1.0.sql) are
+     plain text with {{variable}} tokens, by schema design (no
+     HTML column). The (future, Phase 6) reminder-sending Edge
+     Function is what wraps the DB row's subject/body into this
+     shell and substitutes {{variable}} tokens with real values
+     before calling Resend's API. Until that Edge Function is
+     built, this file is the reference design + drop-in markup
+     for that wrapping step — not something you paste anywhere
+     inside Resend itself (Resend has no persistent "template"
+     object for this project's architecture; the HTML is passed
+     fresh on every send() call).
+
+     {{variable}} tokens below are left exactly as they appear
+     in file 23 — swap in real values (or leave the substitution
+     to the sending code) rather than hardcoding sample data.
+
+     {{app_url}} is a placeholder for wherever SubSense ends up
+     deployed (Vercel) — swap in the real URL once Phase 2+ has
+     one; every CTA button below links to it.
+     ============================================================ -->
+
+
+<!-- ============================================================
+     SHARED SHELL — every template below reuses this exact
+     header/card/footer structure; only the heading, body
+     paragraph, and CTA label/link change per type.
+     ============================================================ -->
+
+
+<!-- ================= reminder_seven_day ================= -->
+<!-- Subject: {{subscription_name}} renews in a week -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">{{subscription_name}} renews in a week</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          {{subscription_name}} renews on {{renewal_date}} for {{amount}} {{currency}}. A week's a good amount of runway if you want to reconsider it — nothing to do otherwise.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Review in SubSense</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this because you have reminders on for {{subscription_name}}. Manage reminder settings anytime in SubSense.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ================= reminder_two_day ================= -->
+<!-- Subject: {{subscription_name}} renews in 2 days -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">{{subscription_name}} renews in 2 days</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          {{amount}} {{currency}} charges in 2 days for {{subscription_name}}. Last real window to make a call before it renews.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Review in SubSense</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this because you have reminders on for {{subscription_name}}. Manage reminder settings anytime in SubSense.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ================= reminder_renewal_day ================= -->
+<!-- Subject: {{subscription_name}} renews today -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">{{subscription_name}} renews today</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          {{amount}} {{currency}} goes out today for {{subscription_name}}. If that's expected, no action needed — otherwise, today's your last easy window to catch it before the charge.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Review in SubSense</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this because you have reminders on for {{subscription_name}}. Manage reminder settings anytime in SubSense.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ================= reminder_post_renewal_checkin ================= -->
+<!-- Subject: Still worth it — {{subscription_name}}? -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">Still worth it — {{subscription_name}}?</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          {{subscription_name}} just renewed. Worth a 10-second gut check: still using it enough to justify {{amount}} {{currency}}?
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Review in SubSense</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this because you have reminders on for {{subscription_name}}. Manage reminder settings anytime in SubSense.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ================= reminder_shared_payment ================= -->
+<!-- Subject: {{amount}} {{currency}} owed for {{subscription_name}} -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">{{amount}} {{currency}} owed for {{subscription_name}}</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          Your share of {{subscription_name}} this cycle is {{amount}} {{currency}}. Mark it paid whenever you've settled it.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Mark as paid</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this because you're a shared member on {{subscription_name}}. Manage this in SubSense.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ================= reminder_monthly_digest ================= -->
+<!-- Subject: {{active_subscription_count}} subscriptions, {{monthly_spend}} {{currency}} this month -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">{{active_subscription_count}} subscriptions, {{monthly_spend}} {{currency}} this month</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          You're running {{active_subscription_count}} active subscriptions at {{monthly_spend}} {{currency}} a month ({{annual_spend}} {{currency}} a year). {{ai_insight_count}} insights are sitting in your Decision Workspace if you want a closer look.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Open Decision Workspace</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this monthly digest because it's on by default. Turn it off anytime in SubSense settings.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ================= reminder_lapsed_reengagement ================= -->
+<!-- Subject: Your subscriptions didn't pause while you were away -->
+
+<div style="background-color:#F1F5F9; padding:40px 16px; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px; margin:0 auto; background-color:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+    <tr>
+      <td style="padding:32px 32px 24px 32px;">
+<span style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:18px; font-weight:600; color:#4D7C0F; letter-spacing:-0.01em;">SubSense</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 8px 32px;">
+        <h1 style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:20px; font-weight:600; color:#0F172A; margin:0 0 12px 0;">Your subscriptions didn't pause while you were away</h1>
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; line-height:1.6; color:#0F172A; margin:0 0 24px 0;">
+          You haven't opened SubSense in a while — meanwhile {{active_subscription_count}} subscriptions kept renewing at {{monthly_spend}} {{currency}} a month. Worth a look next time you have a minute.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 28px 32px;">
+        <a href="{{app_url}}" style="display:inline-block; font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:15px; font-weight:600; color:#0F172A; background-color:#A3E635; text-decoration:none; padding:12px 24px; border-radius:8px;">Take a look</a>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:0 32px 32px 32px; border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-family:'IBM Plex Sans', Helvetica, Arial, sans-serif; font-size:13px; line-height:1.6; color:#64748B; margin:0;">You're getting this because it's been a while since your last visit. Manage this anytime in SubSense settings.</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- reminder_dev_test intentionally omitted — internal payload, never brand-styled, per file 23. -->
